@@ -129,7 +129,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.status(204).end();
 
-  // Don't hard-fail without an API key; we'll fall back to local markdown below.
+  if (!process.env.GEMINI_API_KEY2) {
+    return res.status(500).json({ error: "GEMINI_API_KEY is not set" });
+  }
 
   try {
     // 1) 入力
@@ -163,21 +165,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         JSON.stringify(choices ?? {}, null, 2),
       ].join("\n");
 
-    // 4) Gemini 呼び出し（失敗時はローカルの簡易Markdownにフォールバック）
-    let markdown = "";
-    if (process.env.GEMINI_API_KEY) {
-      try {
-        const r = await ai.models.generateContent({
-          model: MODEL,
-          contents: [{ role: "user", parts: [{ text: finalPrompt }] }],
-        });
-        markdown = r.text ?? "";
-      } catch (err) {
-        markdown = `# Your Personality Snapshot ✨\n\nYou are a unique person with many cool sides! ✨\n\n## Key Traits 🧩\n- Planning: You like to organize and get things done\n- Realistic: You like things that are practical and clear\n- Thinking: You enjoy solving problems with logic\n\n## In Daily Life 🏃\n- You plan your day so you know what to expect\n- You think carefully before making a big choice\n- You enjoy things that are useful and make sense\n\n## Friendly Tips 💡\n- Remember to be flexible, things can change!\n- Take time to enjoy the little things\n\n## Compatibility ❤️\n\nBest (Top 3)\n\n- INFJ: Focus on emotions and creating meaningful connections\n- ENFP: Embrace change, valuing empathy in all endeavors\n- INTP: Shares curiosity, loves discussing new ideas together\n\nChallenge (Top 3)\n\n- ESTJ: May find each other's styles too different\n- ISTJ: Differing approaches to structure, details, and openness\n- ENFP: Your need for action could overwhelm them\n\nHighlights\nPlanning, Realistic, Thoughtful`;
-      }
-    } else {
-      markdown = `# Your Personality Snapshot ✨\n\nYou are a unique person with many cool sides! ✨\n\n## Key Traits 🧩\n- Planning: You like to organize and get things done\n- Realistic: You like things that are practical and clear\n- Thinking: You enjoy solving problems with logic\n\n## In Daily Life 🏃\n- You plan your day so you know what to expect\n- You think carefully before making a big choice\n- You enjoy things that are useful and make sense\n\n## Friendly Tips 💡\n- Remember to be flexible, things can change!\n- Take time to enjoy the little things\n\n## Compatibility ❤️\n\nBest (Top 3)\n\n- INFJ: Focus on emotions and creating meaningful connections\n- ENFP: Embrace change, valuing empathy in all endeavors\n- INTP: Shares curiosity, loves discussing new ideas together\n\nChallenge (Top 3)\n\n- ESTJ: May find each other's styles too different\n- ISTJ: Differing approaches to structure, details, and openness\n- ENFP: Your need for action could overwhelm them\n\nHighlights\nPlanning, Realistic, Thoughtful`;
-    }
+    // 4) Gemini 呼び出し
+    const r = await ai.models.generateContent({
+      model: MODEL,
+      contents: [{ role: "user", parts: [{ text: finalPrompt }] }],
+    });
+
+  const markdown = r.text ?? "";
 
     // 5) 返す構造（前面で描画しやすい形）
     const badges = collectTraits(choices);

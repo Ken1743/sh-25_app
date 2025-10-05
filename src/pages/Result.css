@@ -129,9 +129,10 @@ body {
 
 .share-btn {
   margin-left: auto;
-  background: var(--card);
+  background: var(--accent);
   border: 1px solid var(--border);
-  color: var(--text);
+  color: var(--card);
+  font-weight: 500;
 
   .title-badges {
     display: inline-flex;
@@ -160,7 +161,9 @@ body {
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 .share-btn:hover {
-  background: color-mix(in oklab, var(--card), var(--border) 35%);
+  background: color-mix(in oklab, var(--accent-2), var(--border) 35%);
+  transform: translateY(1px);
+  transition: 0.5ms;
 }
 /* Safety: if an older build renders a second .share-btn (Reset Prev), hide it */
 .title-wrap .share-btn + .share-btn {

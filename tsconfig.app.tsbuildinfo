@@ -1,1 +1,18 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/components/comment/comment.tsx","./src/components/generating/generating.tsx","./src/components/introoverlay/introoverlay.tsx","./src/components/mbtipic/mbtipic.tsx","./src/components/profilerader/profilerader.tsx","./src/components/sharecard/sharecard.tsx","./src/components/unitygame/unitygame.tsx","./src/pages/home.tsx","./src/pages/result.tsx","./src/pages/test.tsx","./src/types/unity.ts"],"version":"5.9.3"}
+{
+    "root": [
+        "./src/app.tsx",
+        "./src/main.tsx",
+        "./src/components/comment/comment.tsx",
+        "./src/components/generating/generating.tsx",
+        "./src/components/introoverlay/introoverlay.tsx",
+        "./src/components/mbtiPic/mbtiPic.tsx",
+        "./src/components/profilerader/profilerader.tsx",
+        "./src/components/sharecard/sharecard.tsx",
+        "./src/components/unitygame/unitygame.tsx",
+        "./src/pages/home.tsx",
+        "./src/pages/result.tsx",
+        "./src/pages/test.tsx",
+        "./src/types/unity.ts"
+    ],
+    "version": "5.9.3"
+}

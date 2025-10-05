@@ -22,7 +22,7 @@ export default function ShareCard({
   bestMatches = [],
   challengeMatches = [],
 }: ShareCardProps) {
-  const imgSrc = mbti ? `/mbti/${mbti.toUpperCase()}.jpg` : "/mbti/placeholder.jpg";
+  const imgSrc = mbti ? `/mbti/${mbti.toUpperCase()}.png` : "/mbti/placeholder.png";
   const clean = (s: string) => s.replace(/\*\*/g, "").trim();
   return (
     <div className={`share-card theme-${theme}`} role="img" aria-label="Share preview card">

@@ -203,17 +203,7 @@ export default function ResultPage() {
       </header>
 
       <section className="card grid-bottom">
-        {now?.points?.length ? (
-          <div className="bigfive-list" aria-label="Big Five percentages">
-            {now.points.map((p) => (
-              <div key={p.axis} className="bf-row">
-                <span className="bf-name">{p.axis}</span>
-                <span className="bf-bar"><span className="bf-fill" style={{ width: `${Math.round(p.value)}%` }} /></span>
-                <span className="bf-pct">{Math.round(p.value)}%</span>
-              </div>
-            ))}
-          </div>
-        ) : null}
+
         <Comment
           markdown={markdown}
           badges={badges}
