@@ -21,9 +21,6 @@ export default function Comment({
   group = "diplomats",
   comment,
   showPill = false,
-  bestMatches = [],
-  challengeMatches = [],
-  compatibilityAdvice,
 }: Props) {
   // Prepare display text: remove everything from "Scored Signals" and below
   const { body, highlights, title, titleEmoji } = useMemo(() => {
