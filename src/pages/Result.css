@@ -219,6 +219,38 @@ body {
   margin-top: 2px;
   color: var(--accent);
 }
+/* Big Five percent rows inside main card */
+.bigfive-list {
+  margin: 6px 0 12px;
+  display: grid;
+  gap: 8px;
+}
+.bf-row {
+  display: grid;
+  grid-template-columns: 150px 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+.bf-name {
+  font-weight: 800;
+  color: #334155;
+}
+.bf-bar {
+  background: #e2e8f0;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.bf-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(135deg, var(--mbti-accent), var(--mbti-accent-2));
+}
+.bf-pct {
+  font-weight: 900;
+  min-width: 44px;
+  text-align: right;
+}
 /* Top row, left card */
 .grid-left-top {
   grid-column: 1 / 2;
