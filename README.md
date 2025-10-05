@@ -1,73 +1,76 @@
-# React + TypeScript + Vite
+# SenseBank — Local Dev Guide
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This app generates a simple personality snapshot from lightweight choices and displays:
 
-Currently, two official plugins are available:
+- A Profile Radar (Now vs Prev)
+- MBTI-type image and highlights
+- Markdown sections rendered from a prompt (Gemini optional)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Below are the fastest steps to run locally and to control the data for Now/Prev so you can verify visuals easily.
 
-## React Compiler
+## Quick start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Requirements
 
-## Expanding the ESLint configuration
+  - Node.js 20 (project is configured for Node 20.x)
+  - npm (bundled with Node)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Install dependencies
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+  ```bash
+  npm install
+  ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Start local dev (Vite + API server)
+  ```bash
+  npm run dev
+  ```
+  - Frontend: http://localhost:5173
+  - API: http://localhost:8787
+  - Vite proxies requests from the app to the local API.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+You can run without any API key. If a Gemini key is present, the AI markdown becomes richer; without it, a friendly static summary is used.
+
+## Optional: Enable Gemini
+
+Create a file named `.env.local` in the project root:
+
+```env
+# Either key works; prefer GEMINI_API_KEY2
+GEMINI_API_KEY2=your_api_key_here
+# or
+# GEMINI_API_KEY=your_api_key_here
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Then re-run `npm run dev`. The server will use the key when calling Gemini.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Build and preview
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Build
+  ```bash
+  npm run build
+  ```
+- Preview a production build locally
+  ```bash
+  npm run preview
+  ```
+
+## API reference (local)
+
+- POST `http://localhost:8787/api/personality`
+  - Body (optional): `{ "choices": { "sofa": 1, "kitchen": 2, ... } }`
+  - Returns: `{ markdown, badges, now, history, mbtiType }`
+
+## Notes for deployment (FYI)
+
+- `vercel.json` is configured to bundle `big5-cal/**` and `src/utils/prompt.txt` for both `api/personality.ts` and `api/gemini.ts` so production matches local.
+- The APIs accept `GEMINI_API_KEY2` or `GEMINI_API_KEY` from the environment.
+
+---
+
+Happy hacking! If you want a one-click reset of Prev in the UI or timestamped Prev labels, say the word and we’ll wire it in.
+`npm i`
+
+`git clone`
+
+`npm run dev`
