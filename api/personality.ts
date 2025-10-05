@@ -3,7 +3,11 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import fs from "node:fs";
 import path from "node:path";
 import { GoogleGenAI } from "@google/genai";
-import { calc } from "../big5-cal/calc";
+import { createRequire } from "node:module";
+
+// big5-cal is CommonJS. In ESM (Vercel) import via createRequire
+const require = createRequire(import.meta.url);
+const { calc } = require("../big5-cal/calc");
 
 type Choices = {
   sofa?: string | number;
@@ -16,12 +20,23 @@ type Choices = {
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 const MODEL = "gemini-2.0-flash-001";
 
-function loadText(rel: string) {
-  const abs = path.join(process.cwd(), rel);
-  return fs.readFileSync(abs, "utf-8");
+function firstExisting(...relPaths: string[]): string | null {
+  for (const rel of relPaths) {
+    try {
+      const abs = path.join(process.cwd(), rel);
+      if (fs.existsSync(abs)) return abs;
+    } catch {}
+  }
+  return null;
 }
-function loadJSON<T = any>(rel: string): T {
-  const abs = path.join(process.cwd(), rel);
+function loadTextAny(...candidates: string[]) {
+  const abs = firstExisting(...candidates);
+  if (abs) return fs.readFileSync(abs, "utf-8");
+  return ""; // fallback to empty; caller can replace with default
+}
+function loadJSONAny<T = any>(...candidates: string[]): T {
+  const abs = firstExisting(...candidates);
+  if (!abs) throw new Error(`Config not found: ${candidates.join(", ")}`);
   return JSON.parse(fs.readFileSync(abs, "utf-8"));
 }
 
@@ -114,7 +129,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.status(204).end();
 
-  if (!process.env.GEMINI_API_KEY) {
+  if (!process.env.GEMINI_API_KEY2) {
     return res.status(500).json({ error: "GEMINI_API_KEY is not set" });
   }
 
@@ -124,12 +139,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const choices: Choices = body?.choices ?? {};
 
     // 2) ベースprompt + calc
-    const basePrompt = loadText("./prompt.txt");
-    const events = loadJSON("./events.json");
+    // Prompt: try common locations; provide a small default if missing
+    let basePrompt = loadTextAny(
+      "src/utils/prompt.txt",
+      "api/prompt.txt",
+      "prompt.txt"
+    );
+    if (!basePrompt) {
+      basePrompt = `You are a friendly guide who explains personality in very simple English.\nReturn ONLY Markdown with the specified sections.`;
+    }
+
+    // Events: prefer shared big5-cal data in repo
+    const events = loadJSONAny("big5-cal/events.json", "api/events.json", "events.json");
     const result = calc(events);
 
     // 3) 追記
-    const signals = buildSignalsMarkdown(result);
+  const signals = buildSignalsMarkdown(result);
     const finalPrompt =
       [
         basePrompt.trim(),

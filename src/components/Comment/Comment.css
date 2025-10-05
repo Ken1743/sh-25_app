@@ -44,6 +44,7 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
+  align-items: center;
 }
 
 /* Color accents for highlight badges */
@@ -51,6 +52,75 @@
   background: #eef7ff;
   color: #0b63c3;
   border-color: #b9ddff;
+}
+.md-h2.md-highlights {
+  color: #0b63c3; /* blue */
+  background: #eef7ff;
+  padding: 4px 8px;
+  border-radius: 8px;
+  margin: 0 8px 0 0; /* small gap before first badge */
+}
+.highlight-wrap .badge {
+  margin-top: 4px;
+}
+/* Variants to add more color */
+.highlight-wrap .badge.plan {
+  background: #eaf3ff;
+  color: #175cd3;
+  border-color: #b2d4ff;
+}
+.highlight-wrap .badge.real {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border-color: #b7e1b2;
+}
+.highlight-wrap .badge.assert {
+  background: #fdecea;
+  color: #d32f2f;
+  border-color: #f8b9b5;
+}
+.highlight-wrap .badge.action {
+  background: #fff6e6;
+  color: #b45309;
+  border-color: #ffd8a8;
+}
+.highlight-wrap .badge.think {
+  background: #eef2ff;
+  color: #3730a3;
+  border-color: #c7d2fe;
+}
+.highlight-wrap .badge.explore {
+  background: #ecfeff;
+  color: #0e7490;
+  border-color: #a5f3fc;
+}
+.highlight-wrap .badge.intuit {
+  background: #f5f3ff;
+  color: #7c3aed;
+  border-color: #ddd6fe;
+}
+.highlight-wrap .badge.feel {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fecdd3;
+}
+.highlight-wrap .badge.intro {
+  background: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+.highlight-wrap .badge.extro {
+  background: #fff7ed;
+  color: #9a3412;
+  border-color: #fed7aa;
+}
+
+/* Ensure Comment title matches card-title used by Radar */
+.mbti-text > .card-title {
+  font-size: 25px;
+  font-weight: 700;
+  margin: 0 0 10px 0; /* align with radar title */
+  text-align: left;
 }
 .mbti-text .markdown-view {
   /* Let the outer .card provide the surface and border to avoid double borders */
@@ -61,4 +131,36 @@
   line-height: 1.55;
   color: var(--text);
   width: 100%;
+}
+
+/* Colorized markdown section headings */
+.md-h2 {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 16px 0 8px;
+}
+.md-h2.md-key {
+  color: #7c3aed; /* purple */
+  background: #f5f3ff;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+.md-h2.md-daily {
+  color: #0e7490; /* teal */
+  background: #ecfeff;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+.md-h2.md-tips {
+  color: #b45309; /* amber */
+  background: #fff7ed;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+.md-h2.md-compat {
+  color: #ef4444; /* red */
+  background: #fff1f2;
+  padding: 4px 8px;
+  border-radius: 8px;
 }

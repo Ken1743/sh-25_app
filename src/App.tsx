@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type JSX } from "react";
-import Home from "./pages/Test";
 import ResultPage from "./pages/Result";
+import Home from "./pages/Home";
 
 type Route = { path: string; element: JSX.Element };
 
@@ -16,7 +16,7 @@ export default function App() {
   useEffect(() => {
     const onHashChange = () => setPath(getPath());
     window.addEventListener("hashchange", onHashChange);
-    // 初回直アクセス対策（リロード時など）
+
     if (!window.location.hash) {
       window.location.hash = "#/"; // デフォルトは Home
     }

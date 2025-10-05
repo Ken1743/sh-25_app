@@ -76,6 +76,17 @@ A warm one-line summary with 1 emoji.
 ## Friendly Tips
 - 2 short supportive tips
 
+## Compability
+  **Best (Top 3)**
+- MBTI : a 5–10 word reason
+- MBTI : a 5–10 word reason
+- MBTI : a 5–10 word reason
+
+  **Challenge (Top 3)**
+- MBTI : briefly note likely friction
+- MBTI : briefly note likely friction
+- MBTI : briefly note likely friction
+
 ## Highlights
 - **Bold** 3–5 important words
 

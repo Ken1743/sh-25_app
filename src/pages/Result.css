@@ -8,15 +8,15 @@
   --accent: #a2af9b;
   --accent-2: #697164;
 
-  /* 既存のMBTI系カラーは残してOK（バッジ用） */
-  --ana-500: #a78bfa;
-  --ana-600: #7c4dff;
-  --dip-500: #34d399;
-  --dip-600: #10b981;
-  --sen-500: #38bdf8;
-  --sen-600: #0ea5e9;
-  --exp-500: #fbbf24;
-  --exp-600: #f59e0b;
+  /* MBTI-specific accent (defaults to general accent) */
+  --mbti-accent: var(--accent);
+  --mbti-accent-2: var(--accent-2);
+
+  /* Radar default colors (overridden by theme-*) */
+  --radar-now-stroke: var(--accent-2);
+  --radar-now-fill: var(--accent);
+  --radar-prev-stroke: var(--muted);
+  --radar-prev-fill: var(--muted);
 
   --ana-500: #a78bfa;
   --ana-600: #7c4dff;
@@ -26,9 +26,40 @@
   --sen-600: #0ea5e9;
   --exp-500: #fbbf24;
   --exp-600: #f59e0b;
+}
 
-  /* --accent: var(--ana-500);
-  --accent-2: var(--ana-600); */
+/* Theme overrides by MBTI group */
+.theme-ana {
+  --mbti-accent: var(--ana-500);
+  --mbti-accent-2: var(--ana-600);
+  --radar-now-stroke: var(--ana-600);
+  --radar-now-fill: var(--ana-500);
+  --radar-prev-stroke: color-mix(in oklab, var(--ana-500), #000 20%);
+  --radar-prev-fill: color-mix(in oklab, var(--ana-500), #fff 65%);
+}
+.theme-dip {
+  --mbti-accent: var(--dip-500);
+  --mbti-accent-2: var(--dip-600);
+  --radar-now-stroke: var(--dip-600);
+  --radar-now-fill: var(--dip-500);
+  --radar-prev-stroke: color-mix(in oklab, var(--dip-500), #000 20%);
+  --radar-prev-fill: color-mix(in oklab, var(--dip-500), #fff 65%);
+}
+.theme-sen {
+  --mbti-accent: var(--sen-500);
+  --mbti-accent-2: var(--sen-600);
+  --radar-now-stroke: var(--sen-600);
+  --radar-now-fill: var(--sen-500);
+  --radar-prev-stroke: color-mix(in oklab, var(--sen-500), #000 20%);
+  --radar-prev-fill: color-mix(in oklab, var(--sen-500), #fff 65%);
+}
+.theme-exp {
+  --mbti-accent: var(--exp-500);
+  --mbti-accent-2: var(--exp-600);
+  --radar-now-stroke: var(--exp-600);
+  --radar-now-fill: var(--exp-500);
+  --radar-prev-stroke: color-mix(in oklab, var(--exp-500), #000 20%);
+  --radar-prev-fill: color-mix(in oklab, var(--exp-500), #fff 65%);
 }
 
 /* .theme-ana {
@@ -85,7 +116,7 @@ body {
 }
 
 .mbti {
-  color: var(--accent);
+  color: var(--mbti-accent);
   padding: 6px 14px;
   font-size: 40px;
   font-weight: 700;
@@ -110,7 +141,44 @@ body {
   font-size: 13px;
 }
 
-/* カード共通 */
+.share-btn {
+  margin-left: auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.share-btn:hover {
+  background: color-mix(in oklab, var(--card), var(--border) 35%);
+}
+
+/* Hidden share card sandbox */
+.share-sandbox {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  pointer-events: none;
+  opacity: 0;
+  background: #fff; /* ensure non-transparent background for capture */
+}
+
+/* Export tuning: cleaner card look for captured image */
+.export-ready {
+  background: var(--bg);
+  padding: 24px 24px 28px;
+  width: 1200px; /* fixed export width for consistent results */
+  max-width: 1200px;
+  margin: 0 auto !important;
+}
+.export-ready .share-btn { display: none; }
+.export-ready .card {
+  box-shadow: none;
+}
+.export-ready .badge-wrap { margin-top: 6px; }
 .card {
   background: var(--card);
   border: 1px solid var(--border);

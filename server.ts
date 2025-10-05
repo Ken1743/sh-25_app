@@ -103,8 +103,8 @@ app.post("/api/personality", async (req, res) => {
     let markdown = "";
     let comment = "";
 
-    if (process.env.GEMINI_API_KEY) {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    if (process.env.GEMINI_API_KEY2) {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY2 });
       const r = await ai.models.generateContent({
         model: "gemini-2.0-flash-001",
         contents: [{ role: "user", parts: [{ text: finalPrompt }] }],

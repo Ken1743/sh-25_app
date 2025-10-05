@@ -1,5 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenAI } from '@google/genai';
+import fs from 'node:fs';
+import path from 'node:path';
 
 /** 生ボディを安全に読む（req.body が undefined の環境でも動く） */
 function readJsonBody(req: VercelRequest): Promise<any> {
@@ -21,7 +23,7 @@ return new Promise((resolve) => {
 });
 }
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY2 });
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
 // 常に JSON と CORS を返す
@@ -32,12 +34,24 @@ res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
 if (req.method === 'OPTIONS') return res.status(204).end();
 
-if (!process.env.GEMINI_API_KEY) {
+if (!process.env.GEMINI_API_KEY2) {
     return res.status(500).end(JSON.stringify({ error: 'GEMINI_API_KEY is not set' }));
 }
 
 try {
-    let prompt = await fetch("/prompt.txt").then(r => r.text());
+        // Load prompt from file; try multiple locations and fallback
+        const candidates = [
+            path.join(process.cwd(), 'src/utils/prompt.txt'),
+            path.join(process.cwd(), 'api/prompt.txt'),
+            path.join(process.cwd(), 'prompt.txt'),
+        ];
+        let prompt = '';
+        for (const p of candidates) {
+            try { if (fs.existsSync(p)) { prompt = fs.readFileSync(p, 'utf-8'); break; } } catch {}
+        }
+        if (!prompt) {
+            prompt = 'You are a friendly guide who explains personality in very simple English. Return ONLY Markdown.';
+        }
     if (req.method === 'GET') {
     // GET でもテストできるように（例: /api/gemini?prompt=Hello）
     prompt = (req.query.prompt as string) ?? prompt;

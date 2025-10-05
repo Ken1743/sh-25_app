@@ -14,11 +14,14 @@
     "@vercel/node": "^2.3.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "node": "^24.9.0",
+    "html-to-image": "^1.11.13",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-markdown": "^10.1.0",
     "recharts": "^3.2.1"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
