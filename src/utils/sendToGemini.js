@@ -144,6 +144,7 @@ function buildFinalPrompt(basePrompt, result, userChoices) {
 async function main() {
     // 1) 必須入力
     const basePrompt = loadText("./prompt.txt");
+    console.log("test--------------------");
     const events = loadJSON("./events.json");
     const result = calc(events);
 
