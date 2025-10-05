@@ -17,7 +17,8 @@ type Choices = {
   dining?: string | number;
 };
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+const API_KEY = process.env.GEMINI_API_KEY2 || process.env.GEMINI_API_KEY;
+const ai = new GoogleGenAI({ apiKey: API_KEY! });
 const MODEL = "gemini-2.0-flash-001";
 
 function firstExisting(...relPaths: string[]): string | null {
@@ -129,7 +130,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.status(204).end();
 
-  if (!process.env.GEMINI_API_KEY2) {
+  if (!API_KEY) {
     return res.status(500).json({ error: "GEMINI_API_KEY is not set" });
   }
 
