@@ -7,12 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Build outputs
+dist/
+dist-ssr/
 
-# Editor directories and files
+# Local dev
+*.local
+node_modules/
+
+# Editor / OS
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,11 +25,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-.vercel
 
+# Vercel local metadata
+.vercel/
+
+# Unity local project (not deployed)
 Unity/
-
-# allow deployable Unity build under public
-!public/unity/
-!public/unity/**
-!public/unity/Build/*.gz
