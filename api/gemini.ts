@@ -16,7 +16,8 @@ type Choices = {
     dining?: string | number;
 };
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY2! });
+const API_KEY = process.env.GEMINI_API_KEY2 || process.env.GEMINI_API_KEY;
+const ai = new GoogleGenAI({ apiKey: API_KEY! });
 const MODEL = "gemini-2.0-flash-001";
 
 function firstExisting(...relPaths: string[]): string | null {
@@ -128,7 +129,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     if (req.method === "OPTIONS") return res.status(204).end();
 
-    if (!process.env.GEMINI_API_KEY2) {
+    if (!API_KEY) {
         return res.status(500).json({ error: "GEMINI_API_KEY is not set" });
     }
 
@@ -152,30 +153,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const events = loadJSONAny("big5-cal/events.json", "api/events.json", "events.json");
         const result = calc(events);
 
-            // 3) 追記（セクション見出しを厳密に固定するフォーマットロック）
-            const signals = buildSignalsMarkdown(result);
-            const formatLock = [
-                "IMPORTANT: Return ONLY Markdown with these exact headings and order (no extra headings):",
-                "# Your Personality Snapshot",
-                "## Key Traits",
-                "## In Daily Life",
-                "## Friendly Tips",
-                "## Compatibility",
-                "## Highlights",
+        // 3) 追記
+        const signals = buildSignalsMarkdown(result);
+        const finalPrompt =
+            [
+                basePrompt.trim(),
                 "",
-                "Keep language in simple English. Keep bullets short.",
+                signals,
+                "",
+                "## Now process this input:",
+                JSON.stringify(choices ?? {}, null, 2),
             ].join("\n");
-            const finalPrompt =
-                [
-                    basePrompt.trim(),
-                    "",
-                    formatLock,
-                    "",
-                    signals,
-                    "",
-                    "## Now process this input:",
-                    JSON.stringify(choices ?? {}, null, 2),
-                ].join("\n");
 
         // 4) Gemini 呼び出し
         const r = await ai.models.generateContent({
