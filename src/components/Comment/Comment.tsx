@@ -108,13 +108,24 @@ export default function Comment({
     const titleEmoji = mapped[0]?.emoji || "🌟";
 
     // Remove trailing periods from bullet items only (not normal paragraphs)
-    const bodyPretty = bodyText
+    // Normalize bullet-form Top3 labels (e.g., "- Best (Top 3)") into standalone
+    // paragraph lines so they won't render as <li> but as <p class="md-top3 ...">.
+    const normalizedTop3 = bodyText
+      .replace(/^[\t\s]*[-*•][\t\s]*(Best\s*\(\s*Top\s*3\s*\)\s*:?)\s*$/gim, "\n$1\n")
+      .replace(/^[\t\s]*[-*•][\t\s]*((?:Challenge|Challenges)\s*\(\s*Top\s*3\s*\)\s*:?)\s*$/gim, "\n$1\n");
+
+    const bodyPretty = normalizedTop3
       .split(/\r?\n/)
       .map((line) => {
-        if (/^\s*[-*•]\s+/.test(line)) {
-          return line.replace(/[。\.]+\s*$/u, "");
+        // Remove a period placed right before an emoji, e.g., "text. 💡" -> "text 💡"
+        // Use broad emoji ranges for compatibility instead of Unicode properties.
+        const emojiBefore = /([。｡．\.])\s*([\u{1F300}-\u{1FAFF}\u{1F900}-\u{1F9FF}\u{2600}-\u{27BF}])/gu;
+        let out = line.replace(emojiBefore, "$2");
+        // For bullet items, also remove trailing periods
+        if (/^\s*[-*•]\s+/.test(out)) {
+          out = out.replace(/[。\.]+\s*$/u, "");
         }
-        return line;
+        return out;
       })
       .join("\n");
 
@@ -162,7 +173,7 @@ export default function Comment({
                 if (label === "key traits") variant = "md-key";
                 else if (label === "in daily life") variant = "md-daily";
                 else if (label === "friendly tips") variant = "md-tips";
-                else if (label === "compability") variant = "md-compat";
+                else if (label === "compability" || label === "compatibility") variant = "md-compat";
                 else if (label === "highlights") variant = "md-highlights";
                 // Emoji per section
                 const emoji =
@@ -182,6 +193,54 @@ export default function Comment({
                     {children} {emoji && <span aria-hidden>{emoji}</span>}
                   </h3>
                 );
+              },
+              h3({ node, children, ...props }) {
+                // Normalize h3 that are actually Top3 subtitles to paragraphs
+                const getText = (n: any): string => {
+                  if (typeof n === "string") return n;
+                  if (Array.isArray(n)) return n.map(getText).join("");
+                  if (n && typeof n === "object" && "props" in n) {
+                    // @ts-ignore
+                    return getText((n as any).props?.children);
+                  }
+                  return "";
+                };
+                const label = getText(children).trim().toLowerCase();
+                const isBest = /^best\s*\(\s*top\s*3\s*\)\s*:?$/.test(label);
+                const isChallenge = /^(challenge|challenges)\s*\(\s*top\s*3\s*\)\s*:?$/.test(label);
+                if (isBest || isChallenge) {
+                  const cls = isBest ? "md-top3 md-top3-best" : "md-top3 md-top3-chal";
+                  return (
+                    <p className={cls} {...props}>
+                      {children}
+                    </p>
+                  );
+                }
+                return <h3 {...props}>{children}</h3>;
+              },
+              p({ node, children, ...props }) {
+                // Convert specific paragraphs to labeled bars
+                const getText = (n: any): string => {
+                  if (typeof n === "string") return n;
+                  if (Array.isArray(n)) return n.map(getText).join("");
+                  if (n && typeof n === "object" && "props" in n) {
+                    // @ts-ignore
+                    return getText((n as any).props?.children);
+                  }
+                  return "";
+                };
+                const label = getText(children).trim().toLowerCase();
+                const isBest = /^best\s*\(\s*top\s*3\s*\)\s*:?$/.test(label);
+                const isChallenge = /^(challenge|challenges)\s*\(\s*top\s*3\s*\)\s*:?$/.test(label);
+                if (isBest || isChallenge) {
+                  const cls = isBest ? "md-top3 md-top3-best" : "md-top3 md-top3-chal";
+                  return (
+                    <p className={cls} {...props}>
+                      {children}
+                    </p>
+                  );
+                }
+                return <p {...props}>{children}</p>;
               },
             }}
           >
