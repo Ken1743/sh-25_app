@@ -1,0 +1,152 @@
+:root {
+  /* ---- App Theme (light) ---- */
+  --bg: #faf9ee; /* 背景 */
+  --card: #ffffff; /* 面/カード */
+  --border: #eeeeee; /* 区切り線 */
+  --text: #222222; /* 文章色 */
+  --muted: #697164; /* 補助テキスト(濃いセージ) */
+
+  /* アクセント（セージ系） */
+  --accent: #a2af9b; /* 明るいセージ */
+  --accent-2: #697164; /* 濃いセージ（グラデ2色目・ボタン濃色） */
+
+  /* 既存のMBTI系カラーは残してOK（バッジ用） */
+  --ana-500: #a78bfa;
+  --ana-600: #7c4dff;
+  --dip-500: #34d399;
+  --dip-600: #10b981;
+  --sen-500: #38bdf8;
+  --sen-600: #0ea5e9;
+  --exp-500: #fbbf24;
+  --exp-600: #f59e0b;
+
+  --ana-500: #a78bfa;
+  --ana-600: #7c4dff;
+  --dip-500: #34d399;
+  --dip-600: #10b981;
+  --sen-500: #38bdf8;
+  --sen-600: #0ea5e9;
+  --exp-500: #fbbf24;
+  --exp-600: #f59e0b;
+
+  --accent: var(--ana-500);
+  --accent-2: var(--ana-600);
+}
+
+.theme-ana {
+  --accent: var(--ana-500);
+  --accent-2: var(--ana-600);
+}
+.theme-dip {
+  --accent: var(--dip-500);
+  --accent-2: var(--dip-600);
+}
+.theme-sen {
+  --accent: var(--sen-500);
+  --accent-2: var(--sen-600);
+}
+.theme-exp {
+  --accent: var(--exp-500);
+  --accent-2: var(--exp-600);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Nunito", system-ui, sans-serif;
+}
+
+.result-layout {
+  max-width: 1080px;
+  margin: 32px auto;
+  padding: 0 16px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1.2fr 1fr;
+  grid-template-rows: auto 1fr 1fr;
+}
+
+/* ヘッダ */
+.rl-header {
+  grid-column: 1 / -1;
+}
+.title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.title {
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.badge-wrap {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.badge {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: var(--shadow-2);
+}
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* カード共通 */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: var(--shadow-1);
+}
+.card-title {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* 配置 */
+.grid-left-top {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+.grid-left-bottom {
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
+}
+.grid-right {
+  grid-column: 2 / 3;
+  grid-row: 2 / 4;
+}
+
+@media (max-width: 960px) {
+  .result-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+  .grid-left-top {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .grid-left-bottom {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .grid-right {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+}

@@ -3,7 +3,8 @@ const fs = require("fs");
 const path = require("path");
 
 function resolvePath(p) {
-return path.isAbsolute(p) ? p : path.join(process.cwd(), p);
+// Resolve relative to this module file so it works regardless of cwd
+return path.isAbsolute(p) ? p : path.join(__dirname, p);
 }
 function loadJSON(absPath) {
 if (!fs.existsSync(absPath)) throw new Error(`Config not found: ${absPath}`);

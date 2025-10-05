@@ -1,0 +1,158 @@
+/* src/routes/Comments.css */
+:root {
+  --bg: #faf9ee;
+  --card: #ffffff;
+  --border: #eeeeee;
+  --text: #222222;
+  --muted: #697164;
+  --primary: #697164; /* 濃いセージを主ボタンに */
+  --primary-pressed: #5e675a; /* Hover/Pressed */
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.comments-container {
+  max-width: 880px;
+  margin: 24px auto 48px;
+  padding: 0 16px;
+  color: var(--text);
+}
+
+.comments-header {
+  margin-bottom: 16px;
+}
+.comments-header h1 {
+  margin: 0 0 4px;
+  font-size: 28px;
+}
+.subtitle {
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.card-title {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.textarea,
+.input {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.textarea {
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.btn {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn:hover {
+  background: #f5f3e8;
+} /* 薄いアイボリー */
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn.primary {
+  border-color: transparent;
+  background: var(--primary);
+  color: #faf9ee;
+}
+.btn.primary:hover {
+  background: var(--primary-pressed);
+}
+.result {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.comment-form {
+  display: grid;
+  gap: 12px;
+}
+.row {
+  display: grid;
+  gap: 6px;
+}
+.label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display: grid;
+  gap: 12px;
+}
+.comment-item {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0f1119;
+}
+.comment-meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.comment-name {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 13px;
+}
+.dot {
+  color: var(--muted);
+}
+.comment-text {
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 540px) {
+  .comments-container {
+    padding: 0 12px;
+  }
+  .comments-header h1 {
+    font-size: 22px;
+  }
+}

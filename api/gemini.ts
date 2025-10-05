@@ -37,7 +37,7 @@ if (!process.env.GEMINI_API_KEY) {
 }
 
 try {
-    let prompt = 'Say hi in one sentence.';
+    let prompt = await fetch("/prompt.txt").then(r => r.text());
     if (req.method === 'GET') {
     // GET でもテストできるように（例: /api/gemini?prompt=Hello）
     prompt = (req.query.prompt as string) ?? prompt;
@@ -60,3 +60,5 @@ try {
     return res.status(500).end(JSON.stringify({ error: String(e?.message ?? e) }));
 }
 }
+
+
