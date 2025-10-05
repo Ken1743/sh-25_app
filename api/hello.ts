@@ -22,3 +22,6 @@ if (req.method === 'OPTIONS') {
 res.setHeader('Access-Control-Allow-Origin', '*'); // 同一Originなら不要
 return res.status(200).json({ ok: true, message: 'Hello from Vercel!' });
 }
+
+
+//test
