@@ -85,3 +85,4 @@ A warm one-line summary with 1 emoji.
 - No jargon, no diagnosis
 - Do not force MBTI letters
 - If traits conflict, say both kindly
+

@@ -1,0 +1,64 @@
+.mbti-pic {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 12px;
+  width: 100%;
+}
+.mbti-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 22px;
+  color: #fff;
+  font-weight: 800;
+  width: max-content;
+  box-shadow: var(--shadow-2);
+}
+.mbti-pill.analysts {
+  background: linear-gradient(135deg, var(--ana-500), var(--ana-600));
+}
+.mbti-pill.diplomats {
+  background: linear-gradient(135deg, var(--dip-500), var(--dip-600));
+}
+.mbti-pill.sentinels {
+  background: linear-gradient(135deg, var(--sen-500), var(--sen-600));
+}
+.mbti-pill.explorers {
+  background: linear-gradient(135deg, var(--exp-500), var(--exp-600));
+}
+
+.mbti-type {
+  font-size: 18px;
+  letter-spacing: 0.6px;
+}
+
+.mbti-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.highlight-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Color accents for highlight badges */
+.highlight-wrap .badge {
+  background: #eef7ff;
+  color: #0b63c3;
+  border-color: #b9ddff;
+}
+.mbti-text .markdown-view {
+  /* Let the outer .card provide the surface and border to avoid double borders */
+  background: transparent;
+  border: none;
+  padding: 0;
+  min-height: 140px;
+  line-height: 1.55;
+  color: var(--text);
+  width: 100%;
+}

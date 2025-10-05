@@ -1,14 +1,12 @@
 :root {
   /* ---- App Theme (light) ---- */
-  --bg: #faf9ee; /* 背景 */
-  --card: #ffffff; /* 面/カード */
-  --border: #eeeeee; /* 区切り線 */
-  --text: #222222; /* 文章色 */
-  --muted: #697164; /* 補助テキスト(濃いセージ) */
-
-  /* アクセント（セージ系） */
-  --accent: #a2af9b; /* 明るいセージ */
-  --accent-2: #697164; /* 濃いセージ（グラデ2色目・ボタン濃色） */
+  --bg: #faf9ee;
+  --card: #ffffff;
+  --border: #eeeeee;
+  --text: #222222;
+  --muted: #697164;
+  --accent: #a2af9b;
+  --accent-2: #697164;
 
   /* 既存のMBTI系カラーは残してOK（バッジ用） */
   --ana-500: #a78bfa;
@@ -29,11 +27,11 @@
   --exp-500: #fbbf24;
   --exp-600: #f59e0b;
 
-  --accent: var(--ana-500);
-  --accent-2: var(--ana-600);
+  /* --accent: var(--ana-500);
+  --accent-2: var(--ana-600); */
 }
 
-.theme-ana {
+/* .theme-ana {
   --accent: var(--ana-500);
   --accent-2: var(--ana-600);
 }
@@ -48,7 +46,7 @@
 .theme-exp {
   --accent: var(--exp-500);
   --accent-2: var(--exp-600);
-}
+} */
 
 body {
   background: var(--bg);
@@ -63,10 +61,10 @@ body {
   display: grid;
   gap: 20px;
   grid-template-columns: 1.2fr 1fr;
-  grid-template-rows: auto 1fr 1fr;
+  /* Size rows to content to avoid large gaps between rows */
+  grid-template-rows: auto auto auto;
 }
 
-/* ヘッダ */
 .rl-header {
   grid-column: 1 / -1;
 }
@@ -77,7 +75,7 @@ body {
   flex-wrap: wrap;
 }
 .title {
-  font-size: 26px;
+  font-size: 40px;
   font-weight: 800;
   margin: 0;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -85,6 +83,14 @@ body {
   background-clip: text;
   color: transparent;
 }
+
+.mbti {
+  color: var(--accent);
+  padding: 6px 14px;
+  font-size: 40px;
+  font-weight: 700;
+}
+
 .badge-wrap {
   display: flex;
   gap: 8px;
@@ -113,23 +119,25 @@ body {
   box-shadow: var(--shadow-1);
 }
 .card-title {
-  font-size: 17px;
+  font-size: 25px;
   font-weight: 700;
   margin-bottom: 10px;
 }
 
-/* 配置 */
+/* Top row, left card */
 .grid-left-top {
   grid-column: 1 / 2;
   grid-row: 2 / 3;
 }
-.grid-left-bottom {
-  grid-column: 1 / 2;
-  grid-row: 3 / 4;
-}
-.grid-right {
+/* Top row, right card */
+.grid-right-top {
   grid-column: 2 / 3;
-  grid-row: 2 / 4;
+  grid-row: 2 / 3;
+}
+/* Bottom row, span full width */
+.grid-bottom {
+  grid-column: 1 / -1;
+  grid-row: 3 / 4;
 }
 
 @media (max-width: 960px) {
@@ -146,6 +154,14 @@ body {
     grid-row: auto;
   }
   .grid-right {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .grid-right-top {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .grid-bottom {
     grid-column: 1 / -1;
     grid-row: auto;
   }

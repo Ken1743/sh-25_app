@@ -10,7 +10,7 @@ type Props = {
   now: Snapshot;
   history?: Snapshot[];
   nowLabel?: string;
-  pastLabel?: string; // 使わない場合も label をそのまま使える
+  pastLabel?: string; 
 };
 
 function composeRadarData(allSeries: Snapshot[]): Array<Record<string, number | string>> {
@@ -45,7 +45,7 @@ export default function ProfileRadar({ now, history = [] }: Props) {
                 key={h.label}
                 name={h.label}
                 dataKey={h.label}
-                stroke="var(--border)"         /* 薄色線 */
+                stroke="var(--muted)"         /* 薄色線 */
                 fill="var(--accent)"           /* アクセント */
                 fillOpacity={0.12}
               />
@@ -62,9 +62,6 @@ export default function ProfileRadar({ now, history = [] }: Props) {
           </RadarChart>
         </ResponsiveContainer>
       </div>
-      <p className="muted small">
-        Axes are flexible. Send 4 or 5 dimensions in <code>now.points</code> &amp; <code>history[].points</code>.
-      </p>
     </div>
   );
 }

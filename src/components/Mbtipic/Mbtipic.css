@@ -1,48 +1,22 @@
+/* src/components/Mbtipic/MbtiPic.css */
 .mbti-pic {
-  display: grid;
-  grid-template-rows: auto auto 1fr;
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
-.mbti-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 16px;
-  border-radius: 22px;
-  color: #fff;
-  font-weight: 800;
-  width: max-content;
-  box-shadow: var(--shadow-2);
+.mbti-pic img {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  border-radius: 12px;
 }
-.mbti-pill.analysts {
-  background: linear-gradient(135deg, var(--ana-500), var(--ana-600));
+.mbti-pic.sm img {
+  max-width: 160px;
 }
-.mbti-pill.diplomats {
-  background: linear-gradient(135deg, var(--dip-500), var(--dip-600));
+.mbti-pic.lg img {
+  max-width: 320px;
 }
-.mbti-pill.sentinels {
-  background: linear-gradient(135deg, var(--sen-500), var(--sen-600));
-}
-.mbti-pill.explorers {
-  background: linear-gradient(135deg, var(--exp-500), var(--exp-600));
-}
-
-.mbti-type {
-  font-size: 18px;
-  letter-spacing: 0.6px;
-}
-
-.mbti-badges {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.mbti-text .markdown-view {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 14px;
-  min-height: 140px;
-  line-height: 1.55;
-  color: var(--text);
+.mbti-label {
+  font-weight: 700;
+  color: var(--muted, #697164);
 }

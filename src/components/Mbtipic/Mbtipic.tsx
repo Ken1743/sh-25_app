@@ -1,38 +1,35 @@
-import "./Mbtipic.css";
+// src/components/Mbtipic/MbtiPic.tsx
+import "./MbtiPic.css";
 
 type Props = {
-  markdown: string, // ここは今はテキスト表示（必要なら react-markdown に置換OK）
-  badges?: string[],
-  typeCode?: string, // 例: "INFJ"（任意）
-  group?: "analysts" | "diplomats" | "sentinels" | "explorers", // 任意
+  /** 例: "INFJ"（大文字/小文字どちらでもOK） */
+  mbti: string;
+  /** 画像サイズ */
+  size?: "sm" | "md" | "lg";
+  /** 下にラベル（INFJなど）を表示するか */
+  showLabel?: boolean;
 };
 
-export default function MbtiPic({
-  markdown,
-  badges = [],
-  typeCode = "INFJ",
-  group = "diplomats",
+export default function MbtiPic({ mbti, size = "md", showLabel = true }: Props) {
+  const code = (mbti || "").toUpperCase().replace(/[^A-Z]/g, "");
+  const isValid = /^[IE][NS][FT][JP]$/.test(code);
 
-}: Props) {
+  // 画像は /public/mbti/INFJ.png などに置く想定
+  const src = isValid ? `/mbti/${code}.jpg` : `/mbti/_placeholder.png`;
+
   return (
-    <div className="mbti-pic">
-      <div className={`mbti-pill ${group}`}>
-        <span className="mbti-type">{typeCode}</span>
-      </div>
-
-      <div className="mbti-badges">
-        {badges.map((b) => (
-          <span key={b} className="badge">
-            {b}
-          </span>
-        ))}
-      </div>
-
-      <div className="mbti-text">
-        <pre className="markdown-view" aria-live="polite">
-          {markdown}
-        </pre>
-      </div>
-    </div>
+    <figure className={`mbti-pic ${size}`}>
+      {/* 読み込み失敗時はプレースホルダーに差し替え */}
+      <img
+        src={src}
+        alt={isValid ? `${code} illustration` : "MBTI illustration"}
+        onError={(e) => {
+          (e.currentTarget as HTMLImageElement).src = "/mbti/_placeholder.png";
+        }}
+      />
+      {showLabel && (
+        <figcaption className="mbti-label">{isValid ? code : "MBTI"}</figcaption>
+      )}
+    </figure>
   );
 }

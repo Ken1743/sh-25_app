@@ -1,0 +1,65 @@
+.gen-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+}
+
+.gen-card {
+  background: #fff;
+  border: 1px solid #e7e7f3;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 320px;
+  width: calc(100% - 32px);
+}
+
+.gen-spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 3px solid #e7e7f3;
+  border-top-color: #7c4dff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gen-texts {
+  display: grid;
+  gap: 4px;
+}
+
+.gen-title {
+  font-weight: 800;
+  color: #2e3142;
+  font-size: 14px;
+}
+
+.gen-sub {
+  font-size: 12px;
+  color: #7d7f8c;
+}
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.result {
+  min-height: 120px;
+}
