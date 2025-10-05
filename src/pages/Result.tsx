@@ -51,10 +51,51 @@ export default function ResultPage() {
     }
     return items;
   };
-  const hl = badges.length ? badges : extractHighlights(markdown);
+  // Prefer Highlights parsed from the AI markdown; fallback to API-provided badges
+  const parsedHighlights = extractHighlights(markdown);
+  const hl = parsedHighlights.length > 0 ? parsedHighlights : badges;
   const clean = (s: string) => s.replace(/\*\*/g, "").replace(/^\s*[-*•]\s*/, "").trim();
-  const cleanedBadges = hl.map(clean).filter(Boolean);
-  const headBadges = cleanedBadges.slice(0, 2);
+  const aliasMap: Record<string, string> = {
+    planning: "Organize",
+    planner: "Organize",
+    realistic: "Real",
+    reality: "Real",
+    introvert: "Intro",
+    extrovert: "Extro",
+    explorer: "Explore",
+    intuitive: "Intuit",
+    assertive: "Assert",
+    "action-first": "Action",
+    actionfirst: "Action",
+    thinking: "Think",
+    feeling: "Feel",
+    turbulent: "Turbo",
+  };
+  const shorten = (raw: string) => {
+    const s = clean(raw);
+    const key = s.toLowerCase().replace(/[^a-z]+/g, "");
+    if (aliasMap[key]) return aliasMap[key];
+    // Heuristic: take first 1–2 capitalized/alpha tokens
+    const tokens = s
+      .replace(/[。．｡!?]/g, " ")
+      .split(/\s+/)
+      .filter(Boolean);
+    if (tokens.length === 0) return s;
+    // Remove trivial stop words
+    const stops = new Set(["you", "are", "a", "an", "the", "i", "to", "and", "of", "is"]);
+    const core: string[] = [];
+    for (const t of tokens) {
+      const k = t.toLowerCase();
+      if (stops.has(k)) continue;
+      core.push(t.replace(/[,.:;]+$/, ""));
+      if (core.length >= 2) break;
+    }
+    const out = (core[0] ? core.join(" ") : tokens[0]).trim();
+    // Title-case single word
+    return out.length <= 2 ? out.toUpperCase() : out[0].toUpperCase() + out.slice(1);
+  };
+  const normalizedBadges = Array.from(new Set(hl.map(shorten).filter(Boolean)));
+  const headBadges = normalizedBadges.slice(0, 2);
 
   // Map MBTI to group for theming
   const mbtiGroup = (() => {

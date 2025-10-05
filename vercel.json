@@ -1,10 +1,16 @@
 {
   "functions": {
     "api/personality.ts": {
-      "includeFiles": "big5-cal/**"
+      "includeFiles": [
+        "big5-cal/**",
+        "src/utils/prompt.txt"
+      ]
     },
     "api/gemini.ts": {
-      "includeFiles": "src/utils/prompt.txt"
+      "includeFiles": [
+        "big5-cal/**",
+        "src/utils/prompt.txt"
+      ]
     }
   },
   "headers": [
