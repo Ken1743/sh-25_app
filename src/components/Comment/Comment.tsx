@@ -29,7 +29,8 @@ export default function Comment({
     const reScored = /(\n|^)#{0,6}\s*Scored\s+Signals[\s\S]*$/i;
     let trimmed = raw.replace(reScored, "").trim();
 
-    // Extract first H1-like title (e.g., "# Your Personality Snapshot")
+    // Extract first H1-like title (e.g., "# Your Personality Snapshot").
+    // If missing, accept an H2/H3 like "## Personality Peek" as title fallback.
     let foundTitle = "";
     const linesAll = trimmed.split(/\r?\n/);
     const h1Idx = linesAll.findIndex((l) => /^\s*#\s+/.test(l));
@@ -37,6 +38,18 @@ export default function Comment({
       foundTitle = linesAll[h1Idx].replace(/^\s*#\s+/, "").trim();
       linesAll.splice(h1Idx, 1); // remove the heading line
       trimmed = linesAll.join("\n").trim();
+    } else {
+      // H1 not found: try to detect an H2/H3 synonym as a title.
+      const headingIdx = linesAll.findIndex((l) => /^\s*#{2,3}\s+/.test(l));
+      if (headingIdx >= 0) {
+        const label = linesAll[headingIdx].replace(/^\s*#{2,3}\s+/, "").trim();
+        const norm = label.toLowerCase().replace(/[^a-z]+/g, " ").trim();
+        if (/(^|\s)personality\s+(peek|snapshot)\b/.test(norm)) {
+          foundTitle = "Your Personality Snapshot"; // normalize to our known title
+          linesAll.splice(headingIdx, 1);
+          trimmed = linesAll.join("\n").trim();
+        }
+      }
     }
 
     // Extract simple "Highlights" block: a line with "Highlights" followed by
@@ -167,11 +180,13 @@ export default function Comment({
                 };
                 const label = getText(children).trim().toLowerCase();
                 let variant = "";
-                if (label === "key traits") variant = "md-key";
-                else if (label === "in daily life") variant = "md-daily";
-                else if (label === "friendly tips") variant = "md-tips";
-                else if (label === "compability" || label === "compatibility") variant = "md-compat";
-                else if (label === "highlights") variant = "md-highlights";
+                // normalize labels (some models may emit slight variations)
+                const norm = label.replace(/\s+/g, " ").trim();
+                if (norm === "key traits") variant = "md-key";
+                else if (norm === "in daily life") variant = "md-daily";
+                else if (norm === "friendly tips") variant = "md-tips";
+                else if (norm === "compability" || norm === "compatibility") variant = "md-compat";
+                else if (norm === "highlights") variant = "md-highlights";
                 // Emoji per section
                 const emoji =
                   variant === "md-key"

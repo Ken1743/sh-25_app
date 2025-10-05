@@ -152,17 +152,30 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const events = loadJSONAny("big5-cal/events.json", "api/events.json", "events.json");
         const result = calc(events);
 
-        // 3) 追記
-        const signals = buildSignalsMarkdown(result);
-        const finalPrompt =
-            [
-                basePrompt.trim(),
+            // 3) 追記（セクション見出しを厳密に固定するフォーマットロック）
+            const signals = buildSignalsMarkdown(result);
+            const formatLock = [
+                "IMPORTANT: Return ONLY Markdown with these exact headings and order (no extra headings):",
+                "# Your Personality Snapshot",
+                "## Key Traits",
+                "## In Daily Life",
+                "## Friendly Tips",
+                "## Compatibility",
+                "## Highlights",
                 "",
-                signals,
-                "",
-                "## Now process this input:",
-                JSON.stringify(choices ?? {}, null, 2),
+                "Keep language in simple English. Keep bullets short.",
             ].join("\n");
+            const finalPrompt =
+                [
+                    basePrompt.trim(),
+                    "",
+                    formatLock,
+                    "",
+                    signals,
+                    "",
+                    "## Now process this input:",
+                    JSON.stringify(choices ?? {}, null, 2),
+                ].join("\n");
 
         // 4) Gemini 呼び出し
         const r = await ai.models.generateContent({
