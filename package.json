@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -k \"vite\" \"tsx server.ts\"",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b --pretty false && DEBUG=vite:* vite build --debug",
     "lint": "eslint .",
     "preview": "vite preview"
   },
