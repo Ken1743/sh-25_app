@@ -5,7 +5,7 @@ import "./Result.css";
 import Generating from "../components/Generating/Generating";
 import Comment from "../components/Comment/Comment";
 import ProfileRadar from "../components/ProfileRader/ProfileRader";
-import Mbtipic from '../components/Mbtipic/Mbtipic';
+import MbtiPic from '../components/Mbtipic/Mbtipic';
 
 type AxisPoint = { axis: string; value: number };
 type Snapshot = { label: string; points: AxisPoint[] };
