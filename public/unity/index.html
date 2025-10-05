@@ -59,7 +59,6 @@
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/V002.loader.js";
       var config = {
-        // ここを差し替える ↓
         dataUrl: "https://pub-99b32d8101da4c9c864c533fd8ebc52f.r2.dev/unity/V002.data.gz",
         frameworkUrl: buildUrl + "/V002.framework.js.gz",
         codeUrl: buildUrl + "/V002.wasm.gz",
@@ -68,6 +67,7 @@
         productName: "Hackathon",
         productVersion: "0.1",
         showBanner: unityShowBanner,
+        decompressionFallback: true,
       };
 
       // By default, Unity keeps WebGL canvas render target size matched with
