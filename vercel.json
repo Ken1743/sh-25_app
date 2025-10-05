@@ -3,7 +3,7 @@
     "api/personality.ts": {
       "includeFiles": [
         "src/utils/prompt.txt",
-        "big5-cal/**"
+        "{big5-cal,models}/**"
       ]
     },
     "api/gemini.ts": {
