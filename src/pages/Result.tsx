@@ -5,7 +5,7 @@ import "./Result.css";
 import Generating from "../components/Generating/Generating";
 import Comment from "../components/Comment/Comment";
 import ProfileRadar from "../components/ProfileRader/ProfileRader";
-import MbtiPic from "../components/Mbtipic/MbtiPic";
+import MbtiPic from "../components/MbtiPic/MbtiPic";
 import ShareCard from "../components/ShareCard/ShareCard";
 import { toPng } from "html-to-image";
 
