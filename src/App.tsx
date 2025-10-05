@@ -10,7 +10,7 @@ export default function App() {
     const h = window.location.hash || "#/";
     return h.startsWith("#") ? h.slice(1) : h; // "#/result" → "/result"
   };
-
+////
   const [path, setPath] = useState<string>(getPath());
 
   useEffect(() => {
