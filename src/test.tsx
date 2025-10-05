@@ -76,7 +76,7 @@ return (
     {error && <p style={{ color: "crimson", marginTop: 12 }}>エラー: {error}</p>}
 
     <h2 style={{ marginTop: 24, marginBottom: 6 }}>応答</h2>
-    <pre style={{ whiteSpace: "pre-wrap", background: "#f6f6f6", padding: 12, borderRadius: 8 }}>
+    <pre style={{color: "black", whiteSpace: "pre-wrap", background: "#f6f6f6", padding: 12, borderRadius: 8 }}>
         {answer || "(なし)"}
     </pre>
 
