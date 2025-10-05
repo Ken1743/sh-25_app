@@ -1,0 +1,30 @@
+    {
+        "scenes": {
+        "wake":    { "code": "scene1" },
+        "sofa":    { "code": "scene2" },
+        "kitchen": { "code": "scene3" },
+        "pc":      { "code": "scene4" }
+        },
+        "actions": [
+        { "id":"wake.snooze_reset",   "alias":"scene1 option1", "scene":"wake",    "duration_min":15, "tags":["Pln"],            "break":false },
+        { "id":"wake.back_to_sleep",  "alias":"scene1 option2", "scene":"wake",    "duration_min":30, "tags":["Intu","Expl"],     "break":false },
+        { "id":"wake.bed_sns",        "alias":"scene1 option3", "scene":"wake",    "duration_min":15, "tags":["Aff","Intu"],      "break":false },
+        { "id":"wake.get_up_break",   "alias":"scene1 option4", "scene":"wake",    "duration_min":0,  "tags":[],                  "break":true  },
+    
+        { "id":"sofa.tidy",           "alias":"scene2 option1", "scene":"sofa",    "duration_min":15, "tags":["Pln","Real"],      "break":false },
+        { "id":"sofa.read",           "alias":"scene2 option2", "scene":"sofa",    "duration_min":15, "tags":["Intu","Analyt"],   "break":false },
+        { "id":"sofa.tv",             "alias":"scene2 option3", "scene":"sofa",    "duration_min":15, "tags":["Aff","Expl"],      "break":false },
+        { "id":"sofa.relax",          "alias":"scene2 option4", "scene":"sofa",    "duration_min":15, "tags":["Intu","Expl"],     "break":false },
+        { "id":"sofa.move_break",     "alias":"scene2 option5", "scene":"sofa",    "duration_min":0,  "tags":[],                  "break":true  },
+    
+        { "id":"kitchen.clean",       "alias":"scene3 option1", "scene":"kitchen", "duration_min":10, "tags":["Pln","Real"],      "break":false },
+        { "id":"kitchen.cook_break",  "alias":"scene3 option2", "scene":"kitchen", "duration_min":30, "tags":["Asrt","Expl"],     "break":true  },
+        { "id":"kitchen.snack_break", "alias":"scene3 option3", "scene":"kitchen", "duration_min":5,  "tags":["Aff","Expl"],      "break":true  },
+        { "id":"kitchen.check",       "alias":"scene3 option4", "scene":"kitchen", "duration_min":5,  "tags":["Analyt","Real"],   "break":false },
+    
+        { "id":"pc.mail",             "alias":"scene4 option1", "scene":"pc",      "duration_min":10, "tags":["Pln","Asrt"],      "break":false },
+        { "id":"pc.game",             "alias":"scene4 option2", "scene":"pc",      "duration_min":30, "tags":["Expl"],            "break":false },
+        { "id":"pc.close_break",      "alias":"scene4 option3", "scene":"pc",      "duration_min":0,  "tags":[],                  "break":true  }
+        ]
+    }
+    

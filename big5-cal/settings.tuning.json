@@ -1,0 +1,80 @@
+{
+    "version": "0.0.1",
+    "time_base_min": 15,
+
+    "matrix": {
+    "Pln":    { "O": -0.05, "C": 0.30, "E": 0.00, "A": 0.00, "N": -0.20 },
+    "Intu":   { "O":  0.25, "C": -0.05, "E": 0.00, "A": 0.00, "N":  0.00 },
+    "Expl":   { "O":  0.15, "C": -0.20, "E": 0.20, "A": -0.05, "N": 0.10 },
+    "Aff":    { "O":  0.05, "C": 0.00, "E": 0.25, "A": 0.30, "N": 0.00 },
+    "Asrt":   { "O":  0.00, "C": 0.00, "E": 0.25, "A": -0.15, "N": 0.05 },
+    "Analyt": { "O":  0.15, "C": 0.10, "E": -0.10, "A": 0.00, "N": 0.00 },
+    "Real":   { "O": -0.10, "C": 0.20, "E": 0.00, "A": 0.10, "N": -0.10 }
+    },
+
+    "actions_fixed": [
+    { "id":"wake.snooze_reset",   "fixed_deltas": { "C": 0.15, "N": 0.25 } },
+    { "id":"wake.back_to_sleep",  "fixed_deltas": { "O": 0.15, "C": -0.25, "N": 0.25 } },
+    { "id":"wake.bed_sns",        "fixed_deltas": { "C": -0.15, "E": -0.40, "N": 0.25 } },
+
+    { "id":"sofa.tidy",           "fixed_deltas": { "O": -0.15, "C": 0.40, "N": -0.15 } },
+    { "id":"sofa.read",           "fixed_deltas": { "O": 0.15, "C": 0.15, "E": -0.40, "N": 0.15 } },
+    { "id":"sofa.tv",             "fixed_deltas": { "E": 0.25, "A": 0.15 } },
+    { "id":"sofa.relax",          "fixed_deltas": { "O": 0.15, "C": -0.15, "N": 0.15 } },
+
+    { "id":"kitchen.clean",       "fixed_deltas": { "O": -0.15, "C": 0.40, "N": -0.15 } },
+    { "id":"kitchen.cook_break",  "fixed_deltas": { "O": 0.25, "C": -0.15, "E": 0.25, "A": -0.15, "N": 0.15 } },
+    { "id":"kitchen.snack_break", "fixed_deltas": { "O": 0.15, "C": -0.15, "A": 0.25, "N": 0.15 } },
+    { "id":"kitchen.check",       "fixed_deltas": { "O": 0.15, "C": 0.25, "N": -0.15 } },
+
+    { "id":"pc.mail",             "fixed_deltas": { "C": 0.25, "E": 0.15, "A": -0.15 } },
+    { "id":"pc.game",             "fixed_deltas": { "O": 0.25, "C": -0.15, "N": 0.15 } }
+    ],
+
+    "context_rules": {
+    "wake_delay": { "N_per_min": 0.01, "C_per_min": -0.008, "N_cap": 0.50, "C_cap": -0.40 },
+    "procrastination_chain": {
+        "ids": ["wake.snooze_reset","wake.back_to_sleep","wake.bed_sns"],
+        "min_consecutive": 2,
+        "bonus": { "N": 0.10, "C": -0.10 }
+    },
+    "game_decision": {
+        "target_id": "pc.game",
+        "continue_delta": { "O": 0.10, "C": -0.10, "N": 0.10 },
+        "stop_delta":     { "C": 0.15, "N": -0.10 }
+    },
+    "scene_switch": { "per_switch": { "O": 0.02, "C": -0.015 }, "caps": { "O": 0.10, "C": -0.08 } },
+    "time_balance": {
+        "pln_real_ratio_bonus": { "threshold": 0.30, "delta": { "C": 0.10, "N": -0.05 } },
+        "passive_media_ratio_penalty": {
+        "threshold": 0.30,
+        "delta": { "E": -0.10, "N": 0.05 },
+        "ids": ["wake.bed_sns","sofa.tv"]
+        }
+    },
+    "consistency_entropy": {
+        "tags": ["Pln","Intu","Expl","Aff","Asrt","Analyt","Real"],
+        "C_gain": 0.10,
+        "O_gain": 0.10
+    },
+    "instant_break": {
+        "threshold_min": 2,
+        "per_hit_delta": { "O": 0.06, "C": -0.04, "E": 0.03 },
+        "stack_decay": "1/sqrt(k)",
+        "caps": { "O": 0.30, "C": -0.20, "E": 0.15 },
+        "burst": { "window_min": 10, "min_hits": 3, "bonus": { "O": 0.05, "C": -0.05 } },
+        "novel_tag_bonus": { "per_new_tag": 0.04, "cap": 0.08 },
+        "over_sampling_guard": { "avg_stay_min_lt": 6, "min_hits": 6, "penalty": { "C": -0.05, "N": 0.03 } }
+    }
+    },
+
+    "scenarios": [
+    {
+        "id": "morning_focus_v1",
+        "type": "regex",
+        "expr": "wake.get_up_break .* (sofa.tidy|sofa.read) .* (kitchen.clean|kitchen.check) .* (pc.mail|pc.close_break)",
+        "base_bonus": { "C": 0.40, "N": -0.20 },
+        "time_limits": { "total_minutes": 90, "per_step_max_gap": 20 }
+    }
+    ]
+}

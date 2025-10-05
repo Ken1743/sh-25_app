@@ -1,0 +1,11 @@
+.
+├─ settings.base.json     # ベース：シーン/アクション/所要時間/タグ/break
+├─ settings.tuning.json   # チューニング：time_base, matrix, fixed_deltas, context, scenarios
+├─ calc.js                # ← これを他所の main から呼ぶ（calc(events)）
+├─ loader.js              # 設定ローダ（内部で base+tuning をマージ）
+├─ context.js             # 文脈補正ルール
+├─ utils.js               # ユーティリティ（tanh/clamp等）
+└─ main.example.js        # 使い方サンプル（任意）
+
+環境変数で設定ファイルのパスを差し替えできます：
+SETTINGS_BASE=./my.base.json SETTINGS_TUNING=./my.tuning.json
