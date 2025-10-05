@@ -8,7 +8,7 @@ This app generates a simple personality snapshot from lightweight choices and di
 
 Below are the fastest steps to run locally and to control the data for Now/Prev so you can verify visuals easily.
 
-## Quick start
+## ⭐️ Quick start
 
 - Requirements
 
@@ -31,7 +31,7 @@ Below are the fastest steps to run locally and to control the data for Now/Prev 
 
 You can run without any API key. If a Gemini key is present, the AI markdown becomes richer; without it, a friendly static summary is used.
 
-## Optional: Enable Gemini
+## 🤖 Optional: Enable Gemini
 
 Create a file named `.env.local` in the project root:
 
@@ -44,7 +44,7 @@ GEMINI_API_KEY2=your_api_key_here
 
 Then re-run `npm run dev`. The server will use the key when calling Gemini.
 
-## Build and preview
+## 🧱 Build and preview
 
 - Build
   ```bash
@@ -55,13 +55,13 @@ Then re-run `npm run dev`. The server will use the key when calling Gemini.
   npm run preview
   ```
 
-## API reference (local)
+## 📖 API reference (local)
 
 - POST `http://localhost:8787/api/personality`
   - Body (optional): `{ "choices": { "sofa": 1, "kitchen": 2, ... } }`
   - Returns: `{ markdown, badges, now, history, mbtiType }`
 
-## Notes for deployment (FYI)
+## 📝 Notes for deployment (FYI)
 
 - `vercel.json` is configured to bundle `big5-cal/**` and `src/utils/prompt.txt` for both `api/personality.ts` and `api/gemini.ts` so production matches local.
 - The APIs accept `GEMINI_API_KEY2` or `GEMINI_API_KEY` from the environment.
