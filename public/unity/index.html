@@ -57,17 +57,19 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/V002.loader.js";
-      var config = {
-        dataUrl: "https://pub-99b32d8101da4c9c864c533fd8ebc52f.r2.dev/unity/V002.data.gz",
-        frameworkUrl: buildUrl + "/V002.framework.js.gz",
-        codeUrl: buildUrl + "/V002.wasm.gz",
+      var loaderUrl = buildUrl + "/WebGL.loader.js";
+      const config = {
+        // ←ここだけ R2 の新URLに差し替える
+        dataUrl: "https://pub-99b32d8101da4c9c864c533fd8ebc52f.r2.dev/unity/V003.data.gz",
+
+        // framework/wasm は今のまま（必要なら同様に R2 へ）
+        frameworkUrl: "/unity/Build/WebGL.framework.js.gz",
+        codeUrl: "/unity/Build/WebGL.wasm.gz",
+
         streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "Hackathon",
-        productVersion: "0.1",
-        showBanner: unityShowBanner,
-        decompressionFallback: true,
+        companyName: "My Company",
+        productName: "My Game",
+        productVersion: "1.0",
       };
 
       // By default, Unity keeps WebGL canvas render target size matched with
