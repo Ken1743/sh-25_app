@@ -69,6 +69,7 @@ Then re-run `npm run dev`. The server will use the key when calling Gemini.
 ---
 
 Happy hacking! If you want a one-click reset of Prev in the UI or timestamped Prev labels, say the word and we’ll wire it in.
+
 `npm i`
 
 `git clone`
