@@ -25,6 +25,7 @@ export default function ResultPage() {
   // const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
   const captureRef = useRef<HTMLDivElement | null>(null);
+  const LS_PREV_KEY = "radar.prev.snapshot";
 
   // Fallback: try to extract an MBTI code from markdown if API field is empty
   const extractMbti = (text: string) => {
@@ -140,11 +141,37 @@ export default function ResultPage() {
       if (!res.ok) throw new Error(raw || `HTTP ${res.status}`);
   const data = JSON.parse(raw);
 
+  // 受信データを反映
   setMarkdown(data.markdown || "");
       setBadges(Array.isArray(data.badges) ? data.badges : []);
-    if (data.now) setNow(data.now);
-  if (Array.isArray(data.history)) setHistory(data.history);
+
+    // 現在値と履歴（Prev）を決定
+    const incomingNow: Snapshot = data.now || { label: "Now", points: [] };
+    const incomingHistory: Snapshot[] = Array.isArray(data.history) ? data.history : [];
+
+    // localStorageに保存されている前回値を優先して履歴に採用
+    try {
+      const rawPrev = typeof window !== "undefined" ? localStorage.getItem(LS_PREV_KEY) : null;
+      const parsedPrev: Snapshot | null = rawPrev ? JSON.parse(rawPrev) : null;
+      if (parsedPrev && Array.isArray(parsedPrev.points) && parsedPrev.points.length > 0) {
+        setHistory([{ label: parsedPrev.label || "Prev", points: parsedPrev.points }, ...incomingHistory.filter((h: Snapshot) => h.label !== "Prev")]);
+      } else {
+        setHistory(incomingHistory);
+      }
+    } catch {
+      setHistory(incomingHistory);
+    }
+
+    setNow(incomingNow);
     setMbtiType(typeof data.mbtiType === "string" ? data.mbtiType : "");
+
+    // 今回のNowを次回用のPrevとして保存
+    try {
+      if (typeof window !== "undefined") {
+        const prevPayload: Snapshot = { label: "Prev", points: incomingNow.points || [] };
+        localStorage.setItem(LS_PREV_KEY, JSON.stringify(prevPayload));
+      }
+    } catch {}
     } catch (e: any) {
       setError(e?.message || String(e));
       console.error("[Result] personality error:", e);
