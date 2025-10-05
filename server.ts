@@ -31,6 +31,20 @@ function oceanToRadar(s: { O: number; C: number; E: number; A: number; N: number
   ];
 }
 
+function ensureStrongContrast(prev: AxisPoint[], now: AxisPoint[]): AxisPoint[] {
+  const clamp = (v: number) => Math.max(0, Math.min(100, Math.round(v)));
+  // 平均差をみて、近すぎる場合は 100-v で反転させる
+  const axes = new Set([...(prev||[]).map(p=>p.axis), ...(now||[]).map(p=>p.axis)]);
+  let total = 0; let n = 0;
+  const mapPrev: Record<string, number> = Object.fromEntries((prev||[]).map(p=>[p.axis, p.value??0]));
+  const mapNow: Record<string, number> = Object.fromEntries((now||[]).map(p=>[p.axis, p.value??0]));
+  for (const ax of axes) { total += Math.abs((mapPrev[ax]??0) - (mapNow[ax]??0)); n++; }
+  const avgDiff = n ? total / n : 0;
+  if (avgDiff >= 20) return prev; // 十分違う
+  // 反転させてコントラストを最大化
+  return (now||[]).map(p => ({ axis: p.axis, value: clamp(100 - (p.value ?? 0)) }));
+}
+
 function collectTraits(c: Record<string, string | number>): string[] {
   const add = (m: Record<string, number>, k: string, w = 1) => (m[k] = (m[k] ?? 0) + w);
   const score: Record<string, number> = {};
@@ -79,18 +93,31 @@ app.post("/api/personality", async (req, res) => {
 
     // Load prompt and events using project-root relative paths
     const basePrompt = loadTextFromRoot("src/utils/prompt.txt");
-    const events = loadJSONFromRoot("big5-cal/events.json");
+    const eventsNow = loadJSONFromRoot("big5-cal/events.json");
+    let eventsPrev: any = null;
+    try {
+      eventsPrev = loadJSONFromRoot("big5-cal/events_prev.json");
+    } catch {}
 
     // Run model calc
-    const result = calc(events);
+  const resultNow = calc(eventsNow);
+  const resultPrev = eventsPrev ? calc(eventsPrev) : null;
 
     // Prepare radar and badges
-    const now = { label: "Now", points: oceanToRadar(result.scaled) };
-    const history = [{ label: "Prev", points: oceanToRadar(result.scaled) }];
+    const now = { label: "Now", points: oceanToRadar(resultNow.scaled) };
+    let historyPoints: AxisPoint[];
+    if (resultPrev) {
+      historyPoints = ensureStrongContrast(oceanToRadar(resultPrev.scaled), now.points);
+    } else {
+      // 強めに対比: 反転（100 - v）
+      const clamp = (v: number) => Math.max(0, Math.min(100, Math.round(v)));
+      historyPoints = now.points.map((p) => ({ axis: p.axis, value: clamp(100 - (p.value ?? 0)) }));
+    }
+    const history = [{ label: "Prev", points: historyPoints }];
     const badges = collectTraits(choices);
 
     // Build final prompt for Gemini
-    const signals = buildSignalsMarkdown(result);
+  const signals = buildSignalsMarkdown(resultNow);
     const finalPrompt = [
       basePrompt.trim(),
       "",
@@ -114,10 +141,10 @@ app.post("/api/personality", async (req, res) => {
     } else {
       // Fallback without Gemini
       markdown = signals;
-      comment = `MBTI: ${result?.mbti?.type ?? "?"}. Openness ${Math.round(result.scaled.O)}%, Conscientiousness ${Math.round(result.scaled.C)}%.`;
+  comment = `MBTI: ${resultNow?.mbti?.type ?? "?"}. Openness ${Math.round(resultNow.scaled.O)}%, Conscientiousness ${Math.round(resultNow.scaled.C)}%.`;
     }
 
-  const mbtiType = result?.mbti?.type || "";
+  const mbtiType = resultNow?.mbti?.type || "";
   res.json({ markdown, badges, now, history, comment, mbtiType });
   } catch (e: any) {
     console.error("[API /api/personality] error:", e);

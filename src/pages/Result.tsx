@@ -40,6 +40,32 @@ export default function ResultPage() {
     return { label: "Prev", points: prevPts };
   };
 
+  const isEffectivelySame = (a: AxisPoint[] = [], b: AxisPoint[] = []) => {
+    if (a.length !== b.length) return false;
+    const byAxis = (arr: AxisPoint[]) => Object.fromEntries(arr.map((p) => [p.axis, p.value ?? 0]));
+    const A = byAxis(a);
+    const B = byAxis(b);
+    const axes = new Set([...Object.keys(A), ...Object.keys(B)]);
+    for (const ax of axes) {
+      const dv = Math.abs((A[ax] ?? 0) - (B[ax] ?? 0));
+      if (dv > 0) return false; // 完全一致のみ同一とみなす
+    }
+    return true;
+  };
+
+  // 平均差が小さい（≦8pt）なら“ほぼ同じ”とみなす
+  const isNearlySame = (a: AxisPoint[] = [], b: AxisPoint[] = []) => {
+    if (!a.length || !b.length) return false;
+    const byAxis = (arr: AxisPoint[]) => Object.fromEntries(arr.map((p) => [p.axis, p.value ?? 0]));
+    const A = byAxis(a);
+    const B = byAxis(b);
+    const axes = new Set([...Object.keys(A), ...Object.keys(B)]);
+    let total = 0, n = 0;
+    for (const ax of axes) { total += Math.abs((A[ax] ?? 0) - (B[ax] ?? 0)); n++; }
+    const avg = n ? total / n : 0;
+    return avg <= 8;
+  };
+
   // Fallback: try to extract an MBTI code from markdown if API field is empty
   const extractMbti = (text: string) => {
     const m = (text || "").toUpperCase().match(/\b[IE][NS][TF][JP]\b/);
@@ -166,18 +192,32 @@ export default function ResultPage() {
     try {
       const rawPrev = typeof window !== "undefined" ? localStorage.getItem(LS_PREV_KEY) : null;
       const parsedPrev: Snapshot | null = rawPrev ? JSON.parse(rawPrev) : null;
+      const apiPrevPts = incomingHistory?.[0]?.points as AxisPoint[] | undefined;
+
       if (parsedPrev && Array.isArray(parsedPrev.points) && parsedPrev.points.length > 0) {
-        setHistory([{ label: parsedPrev.label || "Prev", points: parsedPrev.points }, ...incomingHistory.filter((h: Snapshot) => h.label !== "Prev")]);
+        // 保存PrevがNowと“ほぼ同じ”なら、API Prev（十分違う）を優先。無ければ合成Prev。
+        if (isEffectivelySame(parsedPrev.points, incomingNow.points) || isNearlySame(parsedPrev.points, incomingNow.points)) {
+          if (apiPrevPts && !isNearlySame(apiPrevPts, incomingNow.points)) {
+            setHistory(incomingHistory);
+          } else {
+            setHistory([makeSyntheticPrev(incomingNow.points)]);
+          }
+        } else {
+          setHistory([{ label: parsedPrev.label || "Prev", points: parsedPrev.points }, ...incomingHistory.filter((h: Snapshot) => h.label !== "Prev")]);
+        }
       } else {
-        // APIから履歴が来なければ、初回だけ視覚上の比較用に合成Prevを作る
-        if (!incomingHistory?.length && (incomingNow.points?.length || 0) > 0) {
+        // APIのPrevが無い/同一なら、初回だけ視覚上の比較用に合成Prevを作る
+        const needSynthetic = (!incomingHistory?.length || isEffectivelySame(apiPrevPts, incomingNow.points)) && (incomingNow.points?.length || 0) > 0;
+        if (needSynthetic) {
           setHistory([makeSyntheticPrev(incomingNow.points)]);
         } else {
           setHistory(incomingHistory);
         }
       }
     } catch {
-      if (!incomingHistory?.length && (incomingNow.points?.length || 0) > 0) {
+      const apiPrev = incomingHistory?.[0]?.points as AxisPoint[] | undefined;
+      const needSynthetic = (!incomingHistory?.length || isEffectivelySame(apiPrev, incomingNow.points)) && (incomingNow.points?.length || 0) > 0;
+      if (needSynthetic) {
         setHistory([makeSyntheticPrev(incomingNow.points)]);
       } else {
         setHistory(incomingHistory);

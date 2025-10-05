@@ -51,6 +51,18 @@ function oceanToRadar(s: { O: number; C: number; E: number; A: number; N: number
     ];
 }
 
+function ensureStrongContrast(prev: {axis:string;value:number}[], now: {axis:string;value:number}[]) {
+    const clamp = (v: number) => Math.max(0, Math.min(100, Math.round(v)));
+    const by = (arr: any[]) => Object.fromEntries((arr||[]).map((p:any)=>[p.axis, p.value??0]));
+    const A = by(prev), B = by(now);
+    const axes = new Set([...Object.keys(A), ...Object.keys(B)]);
+    let total = 0, n = 0;
+    for (const ax of axes) { total += Math.abs((A[ax]??0) - (B[ax]??0)); n++; }
+    const avg = n? total/n : 0;
+    if (avg >= 20) return prev;
+    return (now||[]).map((p:any)=>({ axis: p.axis, value: clamp(100 - (p.value ?? 0)) }));
+}
+
 /** trait計上（選択肢→traits）。簡易集計で上位をbadgeに */
 function collectTraits(c: Choices): string[] {
     const add = (m: Record<string, number>, k: string, w = 1) => (m[k] = (m[k] ?? 0) + w);
@@ -149,9 +161,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             basePrompt = `You are a friendly guide who explains personality in very simple English.\nReturn ONLY Markdown with the specified sections.`;
         }
 
-        // Events: prefer shared big5-cal data in repo
-        const events = loadJSONAny("big5-cal/events.json", "api/events.json", "events.json");
-        const result = calc(events);
+    // Events: Now and optional Prev
+    const eventsNow = loadJSONAny("big5-cal/events.json", "api/events.json", "events.json");
+    let eventsPrev: any = null;
+    try { eventsPrev = loadJSONAny("big5-cal/events_prev.json", "api/events_prev.json", "events_prev.json"); } catch {}
+    const result = calc(eventsNow);
 
         // 3) 追記
         const signals = buildSignalsMarkdown(result);
@@ -176,7 +190,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // 5) 返す構造（前面で描画しやすい形）
         const badges = collectTraits(choices);
         const now = { label: "Now", points: oceanToRadar(result.scaled) };
-        const history = [{ label: "Prev", points: oceanToRadar(result.scaled) }]; // 初回は暫定で同値
+        let prevPoints: any[];
+        if (eventsPrev) {
+            const prevRes = calc(eventsPrev);
+            prevPoints = ensureStrongContrast(oceanToRadar(prevRes.scaled), now.points);
+        } else {
+            const clamp = (v: number) => Math.max(0, Math.min(100, Math.round(v)));
+            prevPoints = now.points.map((p:any)=>({ axis: p.axis, value: clamp(100 - (p.value ?? 0)) }));
+        }
+        const history = [{ label: "Prev", points: prevPoints }];
         const mbtiType = result?.mbti?.type || "";
 
         return res.status(200).json({ markdown, badges, now, history, mbtiType });

@@ -16,7 +16,7 @@
   --radar-now-stroke: var(--accent-2);
   --radar-now-fill: var(--accent);
   --radar-prev-stroke: var(--muted);
-  --radar-prev-fill: var(--muted);
+  --radar-prev-fill: color-mix(in oklab, var(--muted), #000 15%);
 
   --ana-500: #a78bfa;
   --ana-600: #7c4dff;
@@ -34,32 +34,32 @@
   --mbti-accent-2: var(--ana-600);
   --radar-now-stroke: var(--ana-600);
   --radar-now-fill: var(--ana-500);
-  --radar-prev-stroke: color-mix(in oklab, var(--ana-500), #000 20%);
-  --radar-prev-fill: color-mix(in oklab, var(--ana-500), #fff 65%);
+  --radar-prev-stroke: #0ea5e9; /* vivid cyan for contrast */
+  --radar-prev-fill: color-mix(in oklab, #0ea5e9, #fff 60%);
 }
 .theme-dip {
   --mbti-accent: var(--dip-500);
   --mbti-accent-2: var(--dip-600);
   --radar-now-stroke: var(--dip-600);
   --radar-now-fill: var(--dip-500);
-  --radar-prev-stroke: color-mix(in oklab, var(--dip-500), #000 20%);
-  --radar-prev-fill: color-mix(in oklab, var(--dip-500), #fff 65%);
+  --radar-prev-stroke: #f59e0b; /* orange contrast */
+  --radar-prev-fill: color-mix(in oklab, #f59e0b, #fff 60%);
 }
 .theme-sen {
   --mbti-accent: var(--sen-500);
   --mbti-accent-2: var(--sen-600);
   --radar-now-stroke: var(--sen-600);
   --radar-now-fill: var(--sen-500);
-  --radar-prev-stroke: color-mix(in oklab, var(--sen-500), #000 20%);
-  --radar-prev-fill: color-mix(in oklab, var(--sen-500), #fff 65%);
+  --radar-prev-stroke: #a78bfa; /* purple contrast */
+  --radar-prev-fill: color-mix(in oklab, #a78bfa, #fff 60%);
 }
 .theme-exp {
   --mbti-accent: var(--exp-500);
   --mbti-accent-2: var(--exp-600);
   --radar-now-stroke: var(--exp-600);
   --radar-now-fill: var(--exp-500);
-  --radar-prev-stroke: color-mix(in oklab, var(--exp-500), #000 20%);
-  --radar-prev-fill: color-mix(in oklab, var(--exp-500), #fff 65%);
+  --radar-prev-stroke: #10b981; /* green contrast */
+  --radar-prev-fill: color-mix(in oklab, #10b981, #fff 60%);
 }
 
 body {

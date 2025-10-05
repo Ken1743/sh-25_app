@@ -18,7 +18,7 @@ export default function ShareCard({
   axes,
   theme,
   title = "Your Personality Snapshot",
-  subtitle = "Made with sh-25",
+  subtitle = "Made with Team Nagano",
   bestMatches = [],
   challengeMatches = [],
 }: ShareCardProps) {
@@ -80,7 +80,7 @@ export default function ShareCard({
         </div>
       )}
       <div className="sc-footer">
-        <span className="brand">sh-25</span>
+        <span className="brand">Team Nagano</span>
       </div>
     </div>
   );
