@@ -9,7 +9,7 @@ export default function MbtiPic({ mbti, size = "md" }: Props) {
   const code = (mbti || "").toUpperCase().replace(/[^A-Z]/g, "");
   const isValid = /^[IE][NS][FT][JP]$/.test(code);
 
-  const src = isValid ? `/mbti/${code}.jpg` : `/mbti/placeholder.png`;
+  const src = isValid ? `/mbti/${code}.jpg` : `/mbti/placeholder.jpg`;
 
   return (
     <figure className={`mbti-pic ${size}`}>
@@ -17,7 +17,7 @@ export default function MbtiPic({ mbti, size = "md" }: Props) {
         src={src}
         alt={isValid ? `${code} illustration` : "MBTI illustration"}
         onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src = "/mbti/placeholder.png";
+          (e.currentTarget as HTMLImageElement).src = "/mbti/placeholder.jpg";
         }}
       />
     </figure>
