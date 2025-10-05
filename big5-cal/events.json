@@ -1,8 +1,12 @@
-[
-    { "key": "scene1 option1" },
-    { "key": "scene1 option4" },
-    { "key": "scene2 option2" },
-    { "key": "scene3 option1" },
-    { "key": "scene4 option2" },
-    { "key": "scene4 option3" }
-]
+{
+    "clickedObjects": [
+        13,
+        12,
+        11,
+        13,
+        12,
+        14,
+        23,
+        24
+    ]
+}
