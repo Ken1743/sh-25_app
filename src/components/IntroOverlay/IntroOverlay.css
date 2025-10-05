@@ -1,0 +1,54 @@
+/* Fullscreen dimmed overlay with subtle blur */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  z-index: 10000;
+}
+
+/* Center card */
+.intro-card {
+  width: 100%;
+  max-width: 560px;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  padding: 22px;
+}
+
+.intro-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  color: var(--accent);
+}
+
+.intro-copy {
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+.intro-button {
+  width: 100%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow-2);
+}
+.intro-button:hover {
+  filter: brightness(0.98);
+}
+.intro-button:active {
+  transform: translateY(1px);
+}

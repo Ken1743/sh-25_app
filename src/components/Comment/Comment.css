@@ -4,17 +4,6 @@
   gap: 12px;
   width: 100%;
 }
-.mbti-pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 16px;
-  border-radius: 22px;
-  color: #fff;
-  font-weight: 800;
-  width: max-content;
-  box-shadow: var(--shadow-2);
-}
 .mbti-pill.analysts {
   background: linear-gradient(135deg, var(--ana-500), var(--ana-600));
 }
@@ -144,18 +133,22 @@
   background: #f5f3ff;
   padding: 4px 8px;
   border-radius: 8px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.14);
 }
 .md-h2.md-daily {
   color: #0e7490; /* teal */
   background: #ecfeff;
   padding: 4px 8px;
   border-radius: 8px;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.14);
 }
 .md-h2.md-tips {
   color: #b45309; /* amber */
   background: #fff7ed;
   padding: 4px 8px;
   border-radius: 8px;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.14);
 }
 
 .md-h2.md-compat {
@@ -163,4 +156,34 @@
   background: #fff1f2;
   padding: 4px 8px;
   border-radius: 8px;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.14);
+}
+
+/* Top3 label bars rendered as paragraph */
+.md-top3 {
+  font-weight: 700;
+  margin: 2px 0 6px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* Indent the contents under Compatibility heading a bit to the right */
+/* Scope to markdown container and support both spellings */
+.markdown-view .md-h2.md-compat + *,
+.markdown-view .md-h2.md-compability + * {
+  /* first element after the heading */
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.markdown-view .md-h2.md-compat ~ :not(.md-h2),
+.markdown-view .md-h2.md-compability ~ :not(.md-h2) {
+  /* indent all following non-heading siblings */
+  margin-left: 24px;
+}
+/* Reset indent after the next section heading that follows the Compatibility heading */
+.markdown-view .md-h2.md-compat ~ .md-h2 ~ *,
+.markdown-view .md-h2.md-compability ~ .md-h2 ~ * {
+  margin-left: 0;
 }

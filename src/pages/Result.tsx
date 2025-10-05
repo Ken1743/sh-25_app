@@ -77,8 +77,43 @@ export default function ResultPage() {
 
   setMarkdown(data.markdown || "");
       setBadges(Array.isArray(data.badges) ? data.badges : []);
-    if (data.now) setNow(data.now);
-  if (Array.isArray(data.history)) setHistory(data.history);
+    const nowSnap: Snapshot = data.now || { label: "Now", points: [] };
+    setNow(nowSnap);
+    // Prefer client-side persisted Prev (one slot). If absent, fall back to server-provided history.
+    try {
+      const saved = typeof window !== "undefined" ? localStorage.getItem("radarPrev") : null;
+      if (saved) {
+        const points = JSON.parse(saved) as AxisPoint[];
+        if (Array.isArray(points)) {
+          setHistory([{ label: "Prev", points }]);
+        } else if (Array.isArray(data.history)) {
+          setHistory(data.history);
+        }
+      } else {
+        // Try to load a mock prev snapshot from public/prev.mock.json
+        try {
+          const r = await fetch("/prev.mock.json", { cache: "no-store" });
+          if (r.ok) {
+            const mock = await r.json();
+            if (Array.isArray(mock?.points)) {
+              setHistory([{ label: mock.label || "Prev", points: mock.points }]);
+            } else if (Array.isArray(data.history)) {
+              setHistory(data.history);
+            }
+          } else if (Array.isArray(data.history)) {
+            setHistory(data.history);
+          }
+        } catch {
+          if (Array.isArray(data.history)) setHistory(data.history);
+        }
+      }
+      // Save current Now as next time's Prev
+      if (typeof window !== "undefined") {
+        localStorage.setItem("radarPrev", JSON.stringify(nowSnap.points || []));
+      }
+    } catch {
+      if (Array.isArray(data.history)) setHistory(data.history);
+    }
     setMbtiType(typeof data.mbtiType === "string" ? data.mbtiType : "");
     } catch (e: any) {
       setError(e?.message || String(e));
@@ -159,6 +194,25 @@ export default function ResultPage() {
       }
     };
 
+    const resetPrev = async () => {
+      try {
+        if (typeof window !== "undefined") localStorage.removeItem("radarPrev");
+      } catch {}
+      // Try mock prev immediately for visible effect
+      try {
+        const r = await fetch("/prev.mock.json", { cache: "no-store" });
+        if (r.ok) {
+          const mock = await r.json();
+          if (Array.isArray(mock?.points)) {
+            setHistory([{ label: mock.label || "Prev", points: mock.points }]);
+            return;
+          }
+        }
+      } catch {}
+      // Fallback to clear history
+      setHistory([]);
+    };
+
   return (
     <div ref={captureRef} className={`result-layout theme-${mbtiGroup}`} aria-busy={loading}>
       <Generating open={loading} label="Generating your snapshot…" sub="It takes a few seconds" />
@@ -178,6 +232,9 @@ export default function ResultPage() {
             disabled={exporting}
           >
             {exporting ? "Preparing…" : "Share / Save Image"}
+          </button>
+          <button className="share-btn" onClick={resetPrev} aria-label="Reset previous snapshot" style={{ marginLeft: 8 }}>
+            Reset Prev
           </button>
           <div className="badge-wrap">
             {badges.map((b) => (

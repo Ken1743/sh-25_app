@@ -62,23 +62,6 @@
   --radar-prev-fill: color-mix(in oklab, var(--exp-500), #fff 65%);
 }
 
-/* .theme-ana {
-  --accent: var(--ana-500);
-  --accent-2: var(--ana-600);
-}
-.theme-dip {
-  --accent: var(--dip-500);
-  --accent-2: var(--dip-600);
-}
-.theme-sen {
-  --accent: var(--sen-500);
-  --accent-2: var(--sen-600);
-}
-.theme-exp {
-  --accent: var(--exp-500);
-  --accent-2: var(--exp-600);
-} */
-
 body {
   background: var(--bg);
   color: var(--text);
@@ -174,11 +157,26 @@ body {
   max-width: 1200px;
   margin: 0 auto !important;
 }
-.export-ready .share-btn { display: none; }
+.export-ready .share-btn {
+  display: none;
+}
 .export-ready .card {
   box-shadow: none;
 }
-.export-ready .badge-wrap { margin-top: 6px; }
+.export-ready .badge-wrap {
+  margin-top: 6px;
+}
+/* For export, focus on the main content card only */
+.export-ready .rl-header,
+.export-ready .grid-left-top,
+.export-ready .grid-right-top {
+  display: none !important;
+}
+.export-ready .grid-bottom {
+  grid-column: 1 / -1;
+  grid-row: 1 / 2;
+  margin-top: 0;
+}
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -190,8 +188,9 @@ body {
   font-size: 25px;
   font-weight: 700;
   margin-bottom: 10px;
+  margin-top: 2px;
+  color: var(--accent);
 }
-
 /* Top row, left card */
 .grid-left-top {
   grid-column: 1 / 2;

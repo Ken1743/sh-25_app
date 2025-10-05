@@ -56,6 +56,30 @@
   --grad-sen: linear-gradient(135deg, var(--sen-500), #67e8f9);
   --grad-exp: linear-gradient(135deg, var(--exp-500), #facc15);
 }
+html,
+body {
+  font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* 可変フォントの使い方（重さ） */
+.thin {
+  font-weight: 100;
+}
+.reg {
+  font-weight: 400;
+}
+.semi {
+  font-weight: 600;
+}
+.bold {
+  font-weight: 700;
+}
+
+/* イタリックもOK（Variableのital軸） */
+.italic {
+  font-style: italic;
+}
 
 a {
   font-weight: 500;
