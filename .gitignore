@@ -25,3 +25,8 @@ dist-ssr
 .vercel
 
 Unity/
+
+# allow deployable Unity build under public
+!public/unity/
+!public/unity/**
+!public/unity/Build/*.gz
