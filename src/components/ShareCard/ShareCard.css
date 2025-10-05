@@ -73,7 +73,8 @@
   text-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
 }
 .sc-body {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 24px;
   padding: 28px 40px;
   flex: 1;
@@ -83,7 +84,6 @@
   flex-wrap: wrap;
   gap: 12px;
   align-content: flex-start;
-  max-width: 60%;
 }
 .sc-badge {
   background: #fff;
@@ -102,11 +102,15 @@
   filter: saturate(1.2);
 }
 .sc-axes {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-width: 0;
+}
+.sc-axes-center {
+  align-self: center;
+  justify-self: center;
+  width: 90%;
 }
 .sc-ax {
   display: grid;
@@ -131,8 +135,9 @@
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
 }
 .sc-ax .pct {
-  font-weight: 800;
+  font-weight: 900;
   color: #0f172a;
+  font-size: 22px;
 }
 .sc-footer {
   padding: 18px 40px;

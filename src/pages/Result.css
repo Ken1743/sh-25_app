@@ -101,8 +101,10 @@ body {
 .mbti {
   color: var(--mbti-accent);
   padding: 6px 14px;
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 44px;
+  font-weight: 900;
+  /* Visual boldening hack for extra thickness across fonts */
+  text-shadow: 0.5px 0 currentColor, -0.5px 0 currentColor;
 }
 
 .badge-wrap {
@@ -111,13 +113,14 @@ body {
   flex-wrap: wrap;
 }
 .badge {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  background: linear-gradient(135deg, var(--mbti-accent), var(--mbti-accent-2));
   color: #fff;
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 13px;
   font-weight: 700;
   box-shadow: var(--shadow-2);
+  margin-right: 8px;
 }
 .muted {
   color: var(--muted);
@@ -129,6 +132,27 @@ body {
   background: var(--card);
   border: 1px solid var(--border);
   color: var(--text);
+
+  .title-badges {
+    display: inline-flex;
+    gap: 8px;
+    margin-left: 6px;
+  }
+  .badge-mini {
+    padding: 4px 10px;
+    font-size: 12px;
+    box-shadow: var(--shadow-1);
+    margin-right: 8px;
+  }
+  .mbti-badge {
+    background: linear-gradient(
+      135deg,
+      var(--mbti-accent),
+      var(--mbti-accent-2)
+    );
+    color: #fff;
+    font-weight: 800;
+  }
   padding: 8px 14px;
   border-radius: 10px;
   font-size: 14px;
@@ -137,6 +161,10 @@ body {
 }
 .share-btn:hover {
   background: color-mix(in oklab, var(--card), var(--border) 35%);
+}
+/* Safety: if an older build renders a second .share-btn (Reset Prev), hide it */
+.title-wrap .share-btn + .share-btn {
+  display: none;
 }
 
 /* Hidden share card sandbox */

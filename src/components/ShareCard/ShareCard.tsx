@@ -23,7 +23,7 @@ export default function ShareCard({
   challengeMatches = [],
 }: ShareCardProps) {
   const imgSrc = mbti ? `/mbti/${mbti.toUpperCase()}.jpg` : "/mbti/placeholder.jpg";
-  const topAxes = axes.slice(0, 3);
+  const clean = (s: string) => s.replace(/\*\*/g, "").trim();
   return (
     <div className={`share-card theme-${theme}`} role="img" aria-label="Share preview card">
       <div className="sc-header">
@@ -38,22 +38,25 @@ export default function ShareCard({
       </div>
 
       <div className="sc-body">
-        <div className="sc-highlights">
-          {highlights.slice(0, 6).map((h) => (
-            <span key={h} className="sc-badge">
-              <span className="emoji" aria-hidden>✨</span>
-              {h}
-            </span>
-          ))}
-        </div>
-        <div className="sc-axes">
-          {topAxes.map((p) => (
+        <div className="sc-axes sc-axes-center">
+          {axes.map((p) => (
             <div key={p.axis} className="sc-ax">
               <span className="name">{p.axis}</span>
               <span className="bar"><span className="fill" style={{ width: `${Math.round(p.value * 100)}%` }} /></span>
               <span className="pct">{Math.round(p.value * 100)}%</span>
             </div>
           ))}
+        </div>
+        <div className="sc-highlights">
+          {highlights.slice(0, 6).map((raw) => {
+            const h = clean(raw);
+            return (
+            <span key={h} className="sc-badge">
+              <span className="emoji" aria-hidden>✨</span>
+              {h}
+            </span>
+            );
+          })}
         </div>
       </div>
       {(bestMatches.length > 0 || challengeMatches.length > 0) && (
