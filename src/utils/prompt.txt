@@ -77,15 +77,18 @@ A warm one-line summary with 1 emoji.
 - 2 short supportive tips
 
 ## Compability
-  **Best (Top 3)**
-- MBTI : a 5–10 word reason
-- MBTI : a 5–10 word reason
-- MBTI : a 5–10 word reason
+I want to align MBTI :  nicely follow the format below
 
-  **Challenge (Top 3)**
-- MBTI : briefly note likely friction
-- MBTI : briefly note likely friction
-- MBTI : briefly note likely friction
+**Best (Top 3)** (ul)
+- **MBTI** : a 5–10 word reason (li)
+- **MBTI** : a 5–10 word reason (li)
+- **MBTI** : a 5–10 word reason (li)
+
+**Challenge (Top 3)** (ul)
+- **MBTI** : briefly note likely friction (li)
+- **MBTI** : briefly note likely friction (li)
+- **MBTI** : briefly note likely friction (li)
+
 
 ## Highlights
 - **Bold** 3–5 important words
