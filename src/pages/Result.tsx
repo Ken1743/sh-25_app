@@ -27,6 +27,19 @@ export default function ResultPage() {
   const captureRef = useRef<HTMLDivElement | null>(null);
   const LS_PREV_KEY = "radar.prev.snapshot";
 
+  // 初回表示用: 前回値が無いときに Now と少し違う形を作る（視認しやすい差分）
+  const makeSyntheticPrev = (points: AxisPoint[]): Snapshot => {
+    // ルール: 50%を基準に小さく反転（±12pt）してクランプ
+    const jitter = 12;
+    const clamp = (v: number) => Math.max(0, Math.min(100, Math.round(v)));
+    const prevPts = (points || []).map((p) => {
+      const v = typeof p.value === "number" ? p.value : 0;
+      const nv = v >= 50 ? v - jitter : v + jitter;
+      return { axis: p.axis, value: clamp(nv) };
+    });
+    return { label: "Prev", points: prevPts };
+  };
+
   // Fallback: try to extract an MBTI code from markdown if API field is empty
   const extractMbti = (text: string) => {
     const m = (text || "").toUpperCase().match(/\b[IE][NS][TF][JP]\b/);
@@ -156,10 +169,19 @@ export default function ResultPage() {
       if (parsedPrev && Array.isArray(parsedPrev.points) && parsedPrev.points.length > 0) {
         setHistory([{ label: parsedPrev.label || "Prev", points: parsedPrev.points }, ...incomingHistory.filter((h: Snapshot) => h.label !== "Prev")]);
       } else {
-        setHistory(incomingHistory);
+        // APIから履歴が来なければ、初回だけ視覚上の比較用に合成Prevを作る
+        if (!incomingHistory?.length && (incomingNow.points?.length || 0) > 0) {
+          setHistory([makeSyntheticPrev(incomingNow.points)]);
+        } else {
+          setHistory(incomingHistory);
+        }
       }
     } catch {
-      setHistory(incomingHistory);
+      if (!incomingHistory?.length && (incomingNow.points?.length || 0) > 0) {
+        setHistory([makeSyntheticPrev(incomingNow.points)]);
+      } else {
+        setHistory(incomingHistory);
+      }
     }
 
     setNow(incomingNow);
