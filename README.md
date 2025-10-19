@@ -1,77 +1,60 @@
-# SenseBank — Local Dev Guide
+# 🧠 SenseBank — Choice-Driven Personality Snapshot
 
-This app generates a simple personality snapshot from lightweight choices and displays:
+💬 Powered by **Google Gemini** + **Unity WebGL**
 
-- A Profile Radar (Now vs Prev)
-- MBTI-type image and highlights
-- Markdown sections rendered from a prompt (Gemini optional)
+## 💡 Inspiration
 
-Below are the fastest steps to run locally and to control the data for Now/Prev so you can verify visuals easily.
+We love personality tests, but long text surveys aren’t friendly for busy people, kids, or anyone who prefers visual, low-reading experiences.  
+So we asked: _what if everyday choices could be “banked” into a quick personality snapshot?_  
+Morning chaos felt perfect—universal, playful, and time-boxed.
 
-## ⭐️ Quick start
+## 🚀 What It Does
 
-- Requirements
+SenseBank is a choice-driven mini-game about how you start your day.  
+You wake up at **7:00 AM** and aim to leave by **10:00**.  
+Each scene (breakfast, outfit, packing, distractions) shapes your **time, mood, and personality traits**.  
+At the end, you’ll get a **friendly personality summary**, a **radar chart**, and **2–3 AI-generated tips**.
 
-  - Node.js 20 (project is configured for Node 20.x)
-  - npm (bundled with Node)
+## 🛠️ How We Built It
 
-- Install dependencies
+- **Unity (C#)** for scenes and animations → exported to **WebGL**
+- Embedded in **React + Vite** frontend
+- Unity streams compact event logs (choice IDs, tags, deltas, timestamps) →
+  **serverless API (Vercel)** → **Google Gemini** (schema-shaped reply, low temperature)
+- **Fallback local scorer** for outages
+- Lightweight UI (mono type, soft gradients, tuned routing/caching) for fast loads
 
-  ```bash
-  npm install
-  ```
+## 🔥 Challenges We Faced
 
-- Start local dev (Vite + API server)
-  ```bash
-  npm run dev
-  ```
-  - Frontend: http://localhost:5173
-  - API: http://localhost:8787
-  - Vite proxies requests from the app to the local API.
+- Streaming structured Unity events to React in real time
+- Making AI summaries feel **personal** but not **clinical**
+- Optimizing WebGL + React performance for low-end devices
 
-You can run without any API key. If a Gemini key is present, the AI markdown becomes richer; without it, a friendly static summary is used.
+## 🏆 Accomplishments
 
-## 🤖 Optional: Enable Gemini
+- End-to-end AI summary that’s consistent yet human-sounding
+- Schema-validated pipeline → clean, render-ready markdown
+- A replayable, shareable UX people enjoyed
+- Shipped Unity + Gemini integration on time
 
-Create a file named `.env.local` in the project root:
+## 🎓 What We Learned
 
-```env
-# Either key works; prefer GEMINI_API_KEY2
-GEMINI_API_KEY2=your_api_key_here
-# or
-# GEMINI_API_KEY=your_api_key_here
-```
+- First-time Unity: **scene flow**, **prefabs**, **state management**, full WebGL build
+- **Schema-first prompting** > free text for reliability
+- **Timeboxing** keeps scope realistic
 
-Then re-run `npm run dev`. The server will use the key when calling Gemini.
+## 🔮 What’s Next
 
-## 🧱 Build and preview
+- More scenes & smarter flow (AI-assisted dynamic branching)
+- Accessibility: reduced-text mode, high-contrast theme, full keyboard nav, SR labels
+- Embeddable widget for real journeys (opt-in, compliance-aware)
+- Deeper analytics, exportable cards, small API for dashboards/A/B tests
 
-- Build
-  ```bash
-  npm run build
-  ```
-- Preview a production build locally
-  ```bash
-  npm run preview
-  ```
+## 🧩 Tech Stack
 
-## 📖 API reference (local)
+Unity · C# · React · TypeScript · Vite · Vercel · Google Gemini · CSS
 
-- POST `http://localhost:8787/api/personality`
-  - Body (optional): `{ "choices": { "sofa": 1, "kitchen": 2, ... } }`
-  - Returns: `{ markdown, badges, now, history, mbtiType }`
+## 🔗 Try It Out
 
-## 📝 Notes for deployment (FYI)
-
-- `vercel.json` is configured to bundle `big5-cal/**` and `src/utils/prompt.txt` for both `api/personality.ts` and `api/gemini.ts` so production matches local.
-- The APIs accept `GEMINI_API_KEY2` or `GEMINI_API_KEY` from the environment.
-
----
-
-Happy hacking! If you want a one-click reset of Prev in the UI or timestamped Prev labels, say the word and we’ll wire it in.
-
-`npm i`
-
-`git clone`
-
-`npm run dev`
+- Live: https://my-app-kappa-steel.vercel.app
+- Repo: https://github.com/fleur0121/sensebank
